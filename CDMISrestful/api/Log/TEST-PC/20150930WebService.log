@@ -1,0 +1,8 @@
+2015/09/30 21:37:51	test-PC   	::1             	ERR	                                                            	数据库连接失败！ error information : Cache Security Error
+   在 InterSystems.Data.CacheClient.CacheADOConnection.Open()
+   在 InterSystems.Data.CacheClient.CacheConnection.Open(Boolean useCache)
+   在 InterSystems.Data.CacheClient.CacheConnection.Open()
+   在 CDMISrestful.CommonLibrary.DataConnection.Connect() 位置 f:\bme319\chronic disease management\restful开发\CDMISrestful\CDMISrestful\CommonLibrary\DataConnection.cs:行号 51
+2015/09/30 21:37:51	test-PC   	::1             	ERR	CmMstInfoItem.GetInfoItem                                   	数据库操作异常！ error information : Cache Security Error
+   在 CDMISrestful.CommonLibrary.DataConnection.Connect() 位置 f:\bme319\chronic disease management\restful开发\CDMISrestful\CDMISrestful\CommonLibrary\DataConnection.cs:行号 69
+   在 CDMISrestful.Models.CmMstInfoItemRepository.GetCmMstInfoItem(List`1 CmMstInfoItemList) 位置 f:\bme319\chronic disease management\restful开发\CDMISrestful\CDMISrestful\Models\CmMstInfoItemRepository.cs:行号 84
