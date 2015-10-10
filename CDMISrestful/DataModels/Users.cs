@@ -12,7 +12,7 @@ namespace CDMISrestful.DataModels
 
     public class LogOn
     {
-        
+
         [Required(ErrorMessage = "请传入Type")]
         public string PwType { get; set; }
         [Required(ErrorMessage = "请输入用户名")]
@@ -22,5 +22,50 @@ namespace CDMISrestful.DataModels
         public string password { get; set; }
         [Required(ErrorMessage = "角色信息必填")]
         public string role { get; set; }
+    }
+
+    public class BasicInfo
+    {
+        public string UserName { get; set; }
+        public string Birthday { get; set; }
+        public string IDNo { get; set; }
+        public string Gender { get; set; }
+
+    }
+    public class PatientBasicInfo
+    {
+        public string UserName { get; set; }
+        public string Age { get; set; }
+        public string Gender { get; set; }
+        public string BloodType { get; set; }
+        public string IDNo { get; set; }
+        public string DoctorId { get; set; }
+        public string InsuranceType { get; set; }
+        public string Birthday { get; set; }
+        public string GenderText { get; set; }
+        public string BloodTypeText { get; set; }
+        public string InsuranceTypeText { get; set; }
+
+
+    }
+    public class UserBasicInfo
+    {
+        public string UserName { get; set; }
+        public string Birthday { get; set; }
+        public string Gender { get; set; }
+        public string BloodType { get; set; }
+        public string IDNo { get; set; }
+        public string DoctorId { get; set; }
+        public string InsuranceType { get; set; }
+        public string InvalidFlag { get; set; }
+    }
+    public class DoctorInfo
+    {
+        public string DoctorId { get; set; }
+        public string DoctorName { get; set; }
+        public string Birthday { get; set; }
+        public string Gender { get; set; }
+        public string IDNo { get; set; }
+        public string InvalidFlag { get; set; }
     }
 }

@@ -252,10 +252,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Cache.Ps.OutPatientInfo.dll</HintPath>
     </Reference>
-    <Reference Include="Cache.Ps.Parameters, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Cache.Ps.Parameters.dll</HintPath>
-    </Reference>
     <Reference Include="Cache.Ps.Patient2VS, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Cache.Ps.Patient2VS.dll</HintPath>
