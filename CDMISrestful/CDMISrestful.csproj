@@ -535,6 +535,7 @@
     <Compile Include="DataMethod\UsersMethod.cs" />
     <Compile Include="DataMethod\VitalInfoMethod.cs" />
     <Compile Include="DataModels\ClinicInfo.cs" />
+    <Compile Include="DataModels\Common.cs" />
     <Compile Include="DataModels\Dict.cs" />
     <Compile Include="DataModels\Message.cs" />
     <Compile Include="DataModels\ModuleInfo.cs" />
