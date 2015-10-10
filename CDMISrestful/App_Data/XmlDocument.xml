@@ -632,6 +632,319 @@
             <param name="item"></param>
             <returns></returns>
         </member>
+        <member name="M:CDMISrestful.DataMethod.CommonMethod.TransTime(System.String)">
+            <summary>
+            时间格式转换 GL 2015-10-10
+            </summary>
+            <param name="time"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetSMSDialogue(System.String,System.String)">
+            <summary>
+            获取消息对话 GL 2015-10-10
+            </summary>
+            <param name="Reciever"></param>
+            <param name="SendBy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.SetSMS(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            将消息写入数据库 GL 2015-10-10
+            </summary>
+            <param name="SendBy"></param>
+            <param name="Reciever"></param>
+            <param name="Content"></param>
+            <param name="piUserId"></param>
+            <param name="piTerminalName"></param>
+            <param name="piTerminalIP"></param>
+            <param name="piDeviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetLatestSMS(System.String,System.String)">
+            <summary>
+            获取最新一条消息 GL 2015-10-10
+            </summary>
+            <param name="DoctorId"></param>
+            <param name="PatientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.SetSMSRead(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            将多条消息设为已读 GL 2015-10-10
+            </summary>
+            <param name="Reciever"></param>
+            <param name="SendBy"></param>
+            <param name="piUserId"></param>
+            <param name="piTerminalName"></param>
+            <param name="piTerminalIP"></param>
+            <param name="piDeviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetSMSCountForOne(System.String,System.String)">
+            <summary>
+            获取一对一未读消息数 GL 2015-10-10
+            </summary>
+            <param name="Reciever"></param>
+            <param name="SendBy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetSMSList(System.String,System.String)">
+            <summary>
+            获取消息联系人列表 GL 2015-10-10
+            </summary>
+            <param name="DoctorId"></param>
+            <param name="CategoryCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetSMSCountForAll(System.String)">
+            <summary>
+            获取某医生未读消息总数 GL 2015-10-10
+            </summary>
+            <param name="DoctorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.RiskInfoMethod.SetData(System.String,System.Int32,System.String,System.String,System.DateTime,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Ps.TreatmentIndicators.SetData GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="SortNo"></param>
+            <param name="AssessmentType"></param>
+            <param name="AssessmentName"></param>
+            <param name="AssessmentTime"></param>
+            <param name="Result"></param>
+            <param name="revUserId"></param>
+            <param name="TerminalName"></param>
+            <param name="TerminalIP"></param>
+            <param name="DeviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.RiskInfoMethod.GetMaxSortNo(System.String)">
+            <summary>
+            GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.RiskInfoMethod.GetResult(System.String,System.Int32)">
+            <summary>
+            GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="SortNo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.SetData(CDMISrestful.CommonLibrary.DataConnection,System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Ps.VitalSigns.SetData GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="RecordDate"></param>
+            <param name="RecordTime"></param>
+            <param name="ItemType"></param>
+            <param name="ItemCode"></param>
+            <param name="Value"></param>
+            <param name="Unit"></param>
+            <param name="revUserId"></param>
+            <param name="TerminalName"></param>
+            <param name="TerminalIP"></param>
+            <param name="DeviceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetVitalSignDates(CDMISrestful.CommonLibrary.DataConnection,System.String,System.Int32,System.Int32)">
+            <summary>
+            获取某日期之后的有数据的起止时间 GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="date"></param>
+            <param name="Num"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetTypedSignDetailByPeriod(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            从数据库拿出相关数据 并增加type字段 区别收缩压、舒张压、脉率  用于phone 体征详细时刻表 GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="ItemType"></param>
+            <param name="ItemCode"></param>
+            <param name="StartDate"></param>
+            <param name="EndDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetSignByDay(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="ItemType"></param>
+            <param name="ItemCode"></param>
+            <param name="RecordDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestVitalSignsByDate(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            获取患者某项生理参数的RecordDate前的最近一条数据 GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="ItemType"></param>
+            <param name="ItemCode"></param>
+            <param name="RecordDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestPatientVitalSigns(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String)">
+            <summary>
+            获取病人最新体征情况 GL 2015-10-10
+            </summary>
+            <param name="UserId"></param>
+            <param name="ItemType"></param>
+            <param name="ItemCode"></param>
+            <returns></returns>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.MessageNo">
+            <summary>
+            消息编号
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.MessageType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.SendStatus">
+            <summary>
+            发送状态
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.ReadStatus">
+             <summary>
+            阅读状态
+             </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.SendBy">
+            <summary>
+            发送者Id
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.SendByName">
+            <summary>
+            接收者Id
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.SendDateTime">
+            <summary>
+            发送时间
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.Title">
+            <summary>
+            主题
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.Content">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.Receiver">
+            <summary>
+            接收者Id
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.ReceiverName">
+            <summary>
+            接收者姓名
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.SMSFlag">
+            <summary>
+            短信标志
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.IDFlag">
+            <summary>
+            区分接收和发送
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.Flag">
+             <summary>
+            区分是否为当天第一条消息
+             </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.Message.Count">
+            <summary>
+            未读消息数
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.PlanDeatil.PlanName">
+            <summary>
+            计划名称  “计划”+序号+起止时间  用于计划列表的显示
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.PlanDeatil.PlanNo">
+            <summary>
+            计划编码
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.PlanDeatil.StartDate">
+            <summary>
+            起始日期
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.PlanDeatil.EndDate">
+            <summary>
+            截止日期
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.RecordDate">
+            <summary>
+            记录日期
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.RecordTime">
+            <summary>
+            记录时间
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.ItemType">
+            <summary>
+            记录类型
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.ItemCode">
+            <summary>
+            记录项目
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.Value">
+            <summary>
+            项目数据
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.Unit">
+            <summary>
+            项目单位
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.StartDate">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.EndDate">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:CDMISrestful.DataModels.VitalInfo.SignType">
+            <summary>
+            参数类型
+            </summary>
+        </member>
         <member name="P:CDMISrestful.DataModels.CmMstInfoItem.CategoryCode">
             <summary>
             模块大分类，如M1，M2
