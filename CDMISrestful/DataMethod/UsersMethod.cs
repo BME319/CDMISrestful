@@ -430,10 +430,6 @@ namespace CDMISrestful.DataBaseMethod
                 {
                     //MessageBox.Show("Cache数据库连接失败");
                     return 0;
-<<<<<<< HEAD
-
-=======
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
                 }
                 else
                 {

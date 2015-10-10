@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <doc>
     <assembly>
         <name>CDMISrestful</name>
@@ -632,7 +632,6 @@
             <param name="item"></param>
             <returns></returns>
         </member>
-
         <member name="M:CDMISrestful.DataMethod.CommonMethod.TransTime(System.String)">
             <summary>
             时间格式转换 GL 2015-10-10
@@ -640,7 +639,6 @@
             <param name="time"></param>
             <returns></returns>
         </member>
-
         <member name="M:CDMISrestful.DataBaseMethod.MessageMethod.GetSMSDialogue(System.String,System.String)">
             <summary>
             获取消息对话 GL 2015-10-10
@@ -736,18 +734,7 @@
             <param name="SortNo"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.TransTime(System.String)">
-            <summary>
-            时间格式转换 GL 2015-10-10
-            </summary>
-            <param name="time"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.SetData(System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.SetData(CDMISrestful.CommonLibrary.DataConnection,System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             Ps.VitalSigns.SetData GL 2015-10-10
             </summary>
@@ -764,11 +751,7 @@
             <param name="DeviceType"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetVitalSignDates(System.String,System.Int32,System.Int32)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetVitalSignDates(CDMISrestful.CommonLibrary.DataConnection,System.String,System.Int32,System.Int32)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             获取某日期之后的有数据的起止时间 GL 2015-10-10
             </summary>
@@ -777,11 +760,7 @@
             <param name="Num"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetTypedSignDetailByPeriod(System.String,System.String,System.String,System.Int32,System.Int32)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetTypedSignDetailByPeriod(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32,System.Int32)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             从数据库拿出相关数据 并增加type字段 区别收缩压、舒张压、脉率  用于phone 体征详细时刻表 GL 2015-10-10
             </summary>
@@ -792,11 +771,7 @@
             <param name="EndDate"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetSignByDay(System.String,System.String,System.String,System.Int32)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetSignByDay(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             GL 2015-10-10
             </summary>
@@ -806,11 +781,7 @@
             <param name="RecordDate"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestVitalSignsByDate(System.String,System.String,System.String,System.Int32)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestVitalSignsByDate(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String,System.Int32)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             获取患者某项生理参数的RecordDate前的最近一条数据 GL 2015-10-10
             </summary>
@@ -820,11 +791,7 @@
             <param name="RecordDate"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
-        <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestPatientVitalSigns(System.String,System.String,System.String)">
-=======
         <member name="M:CDMISrestful.DataBaseMethod.VitalInfoMethod.GetLatestPatientVitalSigns(CDMISrestful.CommonLibrary.DataConnection,System.String,System.String,System.String)">
->>>>>>> 8351812e9a965748afbfe7c352d4850c0ddb05dc
             <summary>
             获取病人最新体征情况 GL 2015-10-10
             </summary>
