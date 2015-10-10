@@ -5,50 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CDMISrestful.DataMethod;
 
 namespace CDMISrestful.DataBaseMethod
 {
     public class VitalInfoMethod
     {
-        DataConnection pclsCache = new DataConnection();
+        //DataConnection pclsCache = new DataConnection();
     
-        /// <summary>
-        /// 时间格式转换 GL 2015-10-10
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public  string TransTime(string time)
-        {
-            int length = time.Length;
-            string result = "";
-            try
-            {
-                switch (length)
-                {
-                    case 1:
-                        result = "00：0" + time;
-                        break;
-                    case 2:
-                        result = "00：" + time;
-                        break;
-                    case 3:
-                        result = "0" + time.Substring(0, 1) + "：" + time.Substring(1, 2);
-                        break;
-                    case 4:
-                        result = time.Substring(0, 2) + "：" + time.Substring(2, 2);  //Substring(起始, 截取长度)
-                        break;
-                    default: break;
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.TransTime", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
-                return null;
-            }
-        }
-
         #region < "Ps.VitalSigns" >
         /// <summary>
         /// Ps.VitalSigns.SetData GL 2015-10-10
@@ -65,7 +29,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="TerminalIP"></param>
         /// <param name="DeviceType"></param>
         /// <returns></returns>
-        public int SetData(string UserId, int RecordDate, int RecordTime, string ItemType, string ItemCode, string Value, string Unit, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
+        public int SetData(DataConnection pclsCache,string UserId, int RecordDate, int RecordTime, string ItemType, string ItemCode, string Value, string Unit, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
         {
             int ret = 2;
             try
@@ -95,7 +59,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="date"></param>
         /// <param name="Num"></param>
         /// <returns></returns>
-        public VitalInfo GetVitalSignDates(string UserId, int date, int Num)
+        public VitalInfo GetVitalSignDates(DataConnection pclsCache,string UserId, int date, int Num)
         {
             try
             {
@@ -129,7 +93,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="StartDate"></param>
         /// <param name="EndDate"></param>
         /// <returns></returns>
-        public  List<VitalInfo> GetTypedSignDetailByPeriod(string UserId, string ItemType, string ItemCode, int StartDate, int EndDate)
+        public  List<VitalInfo> GetTypedSignDetailByPeriod(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int StartDate, int EndDate)
         {
             {
                 List<VitalInfo> items = new List<VitalInfo>();            
@@ -170,9 +134,10 @@ namespace CDMISrestful.DataBaseMethod
                         }
                         item.SignType = SignType;
                         item.RecordDate = RecordDate;
-                        item.RecordTime = TransTime(cdr["RecordTime"].ToString());
+                        item.RecordTime = new CommonMethod().TransTime(cdr["RecordTime"].ToString());
                         item.Value = cdr["Value"].ToString();
-                        item.Unit = cdr["Unit"].ToString();                     
+                        item.Unit = cdr["Unit"].ToString();
+                        items.Add(item);
                     }
                     return items;
                 }
@@ -208,7 +173,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="ItemCode"></param>
         /// <param name="RecordDate"></param>
         /// <returns></returns>
-        public VitalInfo GetSignByDay(string UserId, string ItemType, string ItemCode, int RecordDate)
+        public VitalInfo GetSignByDay(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int RecordDate)
         {
             try
             {
@@ -243,7 +208,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="ItemCode"></param>
         /// <param name="RecordDate"></param>
         /// <returns></returns>
-        public VitalInfo GetLatestVitalSignsByDate(string UserId, string ItemType, string ItemCode, int RecordDate)
+        public VitalInfo GetLatestVitalSignsByDate(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int RecordDate)
         {
             try
             {
@@ -277,7 +242,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="ItemType"></param>
         /// <param name="ItemCode"></param>
         /// <returns></returns>
-        public string GetLatestPatientVitalSigns(string UserId, string ItemType, string ItemCode)
+        public string GetLatestPatientVitalSigns(DataConnection pclsCache,string UserId, string ItemType, string ItemCode)
         {
             string ret = "";
             try
