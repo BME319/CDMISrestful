@@ -59,45 +59,30 @@ namespace CDMISrestful.CommonLibrary
             switch (operationResult)
             {
                 case 1:
-                    //"HomePage.html";
+                    //"已注册激活且有权限，登陆成功，跳转到主页";
                     resp = new HttpResponseMessage(HttpStatusCode.OK);
-                    resp.Content = new StringContent(string.Format("主页"));
+                    resp.Content = new StringContent(string.Format("登陆成功"));
                     break;
                 case 2:
-                    //"已激活 非健康专员";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
+                    //"已注册激活 但没有权限";
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp.Content = new StringContent(string.Format("没有权限"));
                     break;
                 case 3:
-                    //"Activition-Pad.html";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
+                    //您的账号对应的角色未激活，需要先激活；界面跳转到游客页面（已注册但未激活）
+                    resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp.Content = new StringContent(string.Format("暂未激活"));
                     break;
                 case 4:
-                    //"抱歉，由于权限问题，您无法使用本系统";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
+                    //"用户不存在";
+                    resp = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    resp.Content = new StringContent(string.Format("用户不存在"));
                     break;
                 case 5:
-                    //"查找不到UserId";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
-                    break;
-                case 6:
-                    //"密码错误或用户名不存在";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
-                    break;
-                case 7:
-                    //"用户名不能为空！";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
-                    break;
-                case 8:
-                    //"密码不能为空！";
-                    resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(string.Format("数据未找到"));
-                    break;
+                    //"密码错误";
+                    resp = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    resp.Content = new StringContent(string.Format("密码错误"));
+                    break;                    
                 default:
                     break;
             }

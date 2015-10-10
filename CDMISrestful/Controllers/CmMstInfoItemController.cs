@@ -32,15 +32,15 @@ namespace CDMISrestful.Controllers
             return repository.GetAll();
         }
 
-        public CmMstInfoItem GetCmMstInfoItem(string CategoryCode, string Code, int StartDate)
-        {
-            CmMstInfoItem item = repository.Get(CategoryCode, Code, StartDate);
-            if (item == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-            return item;
-        }
+        //public CmMstInfoItem GetCmMstInfoItem(string CategoryCode, string Code, int StartDate)
+        //{
+        //    CmMstInfoItem item = repository.Get(CategoryCode, Code, StartDate);
+        //    if (item == null)
+        //    {
+        //        throw new HttpResponseException(HttpStatusCode.NotFound);
+        //    }
+        //    return item;
+        //}
 
         public IEnumerable<CmMstInfoItem> GetProductsByCategory(string CategoryCode)
         {

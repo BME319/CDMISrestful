@@ -20,12 +20,12 @@ namespace CDMISrestful.Models
             return CmMstInfoItemList;
         }
 
-        public CmMstInfoItem Get(string CategoryCode, string Code, int StartDate)
-        {
-            List<CmMstInfoItem> CmMstInfoItemList = new List<CmMstInfoItem>();
-            GetCmMstInfoItem(CmMstInfoItemList);
-            return CmMstInfoItemList.Find(p => p.CategoryCode == CategoryCode && p.Code == Code && p.StartDate == StartDate);
-        }
+        //public CmMstInfoItem Get(string CategoryCode, string Code, int StartDate)
+        //{
+        //    List<CmMstInfoItem> CmMstInfoItemList = new List<CmMstInfoItem>();
+        //    GetCmMstInfoItem(CmMstInfoItemList);
+        //    return CmMstInfoItemList.Find(p => p.CategoryCode == CategoryCode && p.Code == Code && p.StartDate == StartDate);
+        //}
 
         public int Remove(string CategoryCode, string Code, int StartDate)
         {

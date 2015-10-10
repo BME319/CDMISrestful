@@ -18,7 +18,7 @@ namespace CDMISrestful
             //基于公约的路由
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "Api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
