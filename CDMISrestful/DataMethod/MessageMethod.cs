@@ -1,6 +1,7 @@
 ﻿using CDMISrestful.CommonLibrary;
 using CDMISrestful.DataModels;
 using InterSystems.Data.CacheClient;
+using InterSystems.Data.CacheTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,6 @@ namespace CDMISrestful.DataBaseMethod
 {
     public class MessageMethod
     {
-        DataConnection pclsCache = new DataConnection();
-
         #region < "Mb.MessageRecord" >
         /// <summary>
         /// 获取消息对话 GL 2015-10-10
@@ -19,7 +18,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="Reciever"></param>
         /// <param name="SendBy"></param>
         /// <returns></returns>
-        public List<Message> GetSMSDialogue(string Reciever, string SendBy)
+        public List<Message> GetSMSDialogue(DataConnection pclsCache, string Reciever, string SendBy)
         {
             List<Message> items = new List<Message>();
             CacheCommand cmd = null;
@@ -79,7 +78,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="piTerminalIP"></param>
         /// <param name="piDeviceType"></param>
         /// <returns></returns>
-        public int SetSMS(string SendBy, string Reciever, string Content, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+        public int SetSMS(DataConnection pclsCache, string SendBy, string Reciever, string Content, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
         {
             int ret = 0;
             try
@@ -109,11 +108,15 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="DoctorId"></param>
         /// <param name="PatientId"></param>
         /// <returns></returns>
-        public Message GetLatestSMS(string DoctorId, string PatientId)
+        public Message GetLatestSMS(DataConnection pclsCache, string DoctorId, string PatientId)
         {
             try
             {
                 Message Meg = new Message();
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
                 InterSystems.Data.CacheTypes.CacheSysList list = null;
                 list = Mb.MessageRecord.GetLatestSMS(pclsCache.CacheConnectionObject, DoctorId, PatientId);
                 if (list != null)
@@ -147,7 +150,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="piTerminalIP"></param>
         /// <param name="piDeviceType"></param>
         /// <returns></returns>
-        public int SetSMSRead(string Reciever, string SendBy, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+        public int SetSMSRead(DataConnection pclsCache, string Reciever, string SendBy, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
         {
             int ret = 0;
             try
@@ -177,7 +180,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="Reciever"></param>
         /// <param name="SendBy"></param>
         /// <returns></returns>
-        public int GetSMSCountForOne(string Reciever, string SendBy)
+        public int GetSMSCountForOne(DataConnection pclsCache, string Reciever, string SendBy)
         {
             int ret = 0;
             try
@@ -207,7 +210,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="DoctorId"></param>
         /// <param name="CategoryCode"></param>
         /// <returns></returns>
-        public List<Message> GetSMSList(string DoctorId, string CategoryCode)
+        public List<Message> GetSMSList(DataConnection pclsCache, string DoctorId, string CategoryCode)
         {
             List<Message> items = new List<Message>();
             CacheCommand cmd = null;
@@ -264,7 +267,7 @@ namespace CDMISrestful.DataBaseMethod
         /// </summary>
         /// <param name="DoctorId"></param>
         /// <returns></returns>
-        public int GetSMSCountForAll(string DoctorId)
+        public int GetSMSCountForAll(DataConnection pclsCache, string DoctorId)
         {
             int ret = 0;
             try

@@ -8,7 +8,6 @@ namespace CDMISrestful.DataBaseMethod
 {
     public class RiskInfoMethod
     {
-        DataConnection pclsCache = new DataConnection();    
         #region < "Ps.TreatmentIndicators" >
 
         /// <summary>
@@ -25,7 +24,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="TerminalIP"></param>
         /// <param name="DeviceType"></param>
         /// <returns></returns>
-        public int SetData(string UserId, int SortNo, string AssessmentType, string AssessmentName, DateTime AssessmentTime, string Result, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
+        public int SetData(DataConnection pclsCache, string UserId, int SortNo, string AssessmentType, string AssessmentName, DateTime AssessmentTime, string Result, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
         {
             int ret = 2;
             try
@@ -53,7 +52,7 @@ namespace CDMISrestful.DataBaseMethod
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        public int GetMaxSortNo(string UserId)
+        public int GetMaxSortNo(DataConnection pclsCache, string UserId)
         {
             int ret = 0;
             try
@@ -83,7 +82,7 @@ namespace CDMISrestful.DataBaseMethod
         /// <param name="UserId"></param>
         /// <param name="SortNo"></param>
         /// <returns></returns>
-        public string GetResult(string UserId, int SortNo)
+        public string GetResult(DataConnection pclsCache, string UserId, int SortNo)
         {
             string Result = "";
             try
