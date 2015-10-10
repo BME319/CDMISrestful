@@ -7,7 +7,7 @@ namespace CDMISrestful.Models
 {
     public interface IUsersRepository
     {
-        int LogOn(String userId, String password);
+        int LogOn(string PwType, string userId, string password, string role);
 
         //PatientListInfo GetPatientList(string DoctorId, string ModuleType, int Plan, int Compliance, int Goal);
 

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using CDMISrestful.CommonLibrary;
+using CDMISrestful.DataModels;
 using CDMISrestful.Models;
 
 namespace CDMISrestful.Controllers
@@ -12,9 +13,11 @@ namespace CDMISrestful.Controllers
     public class UsersController : ApiController
     {
         static readonly IUsersRepository repository = new UsersRepository();
-        public HttpResponseMessage LogOn(String userId, String password)
+
+        [ModelValidationFilter]
+        public HttpResponseMessage LogOn(LogOn logOn)
         {
-            int ret = repository.LogOn(userId, password);
+            int ret = repository.LogOn(logOn.PwType, logOn.username, logOn.password, logOn.role);
             return new ExceptionHandler().LogOn(ret);
         }
     }

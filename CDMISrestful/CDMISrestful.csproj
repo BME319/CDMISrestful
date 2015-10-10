@@ -503,6 +503,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="CommonLibrary\CommonFunction.cs" />
     <Compile Include="CommonLibrary\Configuration.cs" />
     <Compile Include="CommonLibrary\DataConnection.cs" />
     <Compile Include="CommonLibrary\ExceptionHandler.cs" />
@@ -514,6 +515,7 @@
     <Compile Include="CommonLibrary\TextLog.cs" />
     <Compile Include="Controllers\ClinicInfoController.cs" />
     <Compile Include="Controllers\CmMstInfoItemController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\DictController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
@@ -523,6 +525,15 @@
     <Compile Include="Controllers\RiskInfoController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VitalInfoController.cs" />
+    <Compile Include="DataMethod\ClinicInfoMethod.cs" />
+    <Compile Include="DataMethod\CommonMethod.cs" />
+    <Compile Include="DataMethod\DictMethod.cs" />
+    <Compile Include="DataMethod\MessageMethod.cs" />
+    <Compile Include="DataMethod\ModuleInfoMethod.cs" />
+    <Compile Include="DataMethod\PlanInfoMethod.cs" />
+    <Compile Include="DataMethod\RiskInfoMethod.cs" />
+    <Compile Include="DataMethod\UsersMethod.cs" />
+    <Compile Include="DataMethod\VitalInfoMethod.cs" />
     <Compile Include="DataModels\ClinicInfo.cs" />
     <Compile Include="DataModels\Dict.cs" />
     <Compile Include="DataModels\Message.cs" />
