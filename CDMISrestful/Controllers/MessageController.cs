@@ -18,6 +18,7 @@ namespace CDMISrestful.Controllers
         /// <param name="Reciever"></param>
         /// <param name="SendBy"></param>
         /// <returns></returns>
+        [Route("Api/v1/Message/GetSMSDialogue")]
         public List<Message> GetSMSDialogue(string Reciever, string SendBy)
         {
             return repository.GetSMSDialogue(Reciever, SendBy);
@@ -34,7 +35,8 @@ namespace CDMISrestful.Controllers
         /// <param name="piTerminalIP"></param>
         /// <param name="piDeviceType"></param>
         /// <returns></returns>
-        public int SetSMS(string SendBy, string Reciever, string Content, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+        [Route("Api/v1/Message/PostSMS")]
+        public int PostSMS(string SendBy, string Reciever, string Content, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
         {
             return repository.SetSMS(SendBy, Reciever, Content, piUserId, piTerminalName, piTerminalIP, piDeviceType);
         }
@@ -45,13 +47,14 @@ namespace CDMISrestful.Controllers
         /// <param name="DoctorId"></param>
         /// <param name="PatientId"></param>
         /// <returns></returns>
+        [Route("Api/v1/Message/GetLatestSMS")]
         public Message GetLatestSMS(string DoctorId, string PatientId)
         {
             return repository.GetLatestSMS(DoctorId, PatientId);
         }
 
         /// <summary>
-        /// SetSMSRead 将多条消息设为已读 GL 2015-10-10
+        /// PostSMSRead 将多条消息设为已读 GL 2015-10-10
         /// </summary>
         /// <param name="Reciever"></param>
         /// <param name="SendBy"></param>
@@ -60,7 +63,8 @@ namespace CDMISrestful.Controllers
         /// <param name="piTerminalIP"></param>
         /// <param name="piDeviceType"></param>
         /// <returns></returns>
-        public int SetSMSRead(string Reciever, string SendBy, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+        [Route("Api/v1/Message/PostSMSRead")]
+        public int PostSMSRead(string Reciever, string SendBy, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
         {
             return repository.SetSMSRead(Reciever, SendBy, piUserId, piTerminalName, piTerminalIP, piDeviceType);
         }
@@ -71,9 +75,9 @@ namespace CDMISrestful.Controllers
         /// <param name="Reciever"></param>
         /// <param name="SendBy"></param>
         /// <returns></returns>
-        public int GetSMSCountForOne(string piReciever, string piSendBy)
+        public int GetSMSCountForOne(string Reciever, string SendBy)
         {
-            return repository.GetSMSCountForOne(piReciever, piSendBy);
+            return repository.GetSMSCountForOne(Reciever, SendBy);
         }
 
         /// <summary>
@@ -82,6 +86,7 @@ namespace CDMISrestful.Controllers
         /// <param name="DoctorId"></param>
         /// <param name="CategoryCode"></param>
         /// <returns></returns>
+        [Route("Api/v1/Message/GetSMSList")]
         public List<Message> GetSMSList(string DoctorId, string CategoryCode)
         {
             return repository.GetSMSList(DoctorId, CategoryCode);
@@ -92,6 +97,7 @@ namespace CDMISrestful.Controllers
         /// </summary>
         /// <param name="DoctorId"></param>
         /// <returns></returns>
+        [Route("Api/v1/Message/GetSMSCountForAll")]
         public int GetSMSCountForAll(string DoctorId)
         {
             return repository.GetSMSCountForAll(DoctorId);
