@@ -134,7 +134,7 @@ namespace CDMISrestful.DataMethod
                         }
                         item.SignType = SignType;
                         item.RecordDate = RecordDate;
-                        item.RecordTime = new CommonMethod().TransTime(cdr["RecordTime"].ToString());
+                        item.RecordTime = new CommonFunction().TransTime(cdr["RecordTime"].ToString());
                         item.Value = cdr["Value"].ToString();
                         item.Unit = cdr["Unit"].ToString();
                         items.Add(item);

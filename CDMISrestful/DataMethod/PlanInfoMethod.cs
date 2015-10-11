@@ -15,7 +15,7 @@ namespace CDMISrestful.DataMethod
             //Ps.Plan
             #region
             //SYF 20151010
-            public int SetData(DataConnection pclsCache, string PlanNo, string PatientId, int StartDate, int EndDate, string Module, int Status, string DoctorId, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+            public int PsPlanSetData(DataConnection pclsCache, string PlanNo, string PatientId, int StartDate, int EndDate, string Module, int Status, string DoctorId, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
             {
                 int ret = 0;
                 try
@@ -40,7 +40,7 @@ namespace CDMISrestful.DataMethod
             }
 
             //SYF 20151010
-            public int PlanStart(DataConnection pclsCache, string PlanNo, int Status, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
+            public int ChangePlanStatus(DataConnection pclsCache, string PlanNo, int Status, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
             {
                 int ret = 0;
 
@@ -794,47 +794,7 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           //CaculateWeekDay 判断日期是星期几 syf 2015-10-10
-           public string CaculateWeekDay(string date)
-           {
-               string week = "星期一";  //待标记颜色
-               try
-               {
-                   string weekDayEn = Convert.ToDateTime(date).DayOfWeek.ToString();
-                   switch (weekDayEn)
-                   {
-                       case "Monday":
-                           week = "星期一";
-                           break;
-                       case "Tuesday":
-                           week = "星期二";
-                           break;
-                       case "Wednesday":
-                           week = "星期三";
-                           break;
-                       case "Thursday":
-                           week = "星期四";
-                           break;
-                       case "Friday":
-                           week = "星期五";
-                           break;
-                       case "Saturday":
-                           week = "星期六";
-                           break;
-                       case "Sunday":
-                           week = "星期日";
-                           break;
-                       default: break;
-                   }
-
-                   return week;
-               }
-               catch (Exception ex)
-               {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsCompliance.CaculateWeekDay", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
-                   return null;
-               }
-           }
+   
             #endregion
         }
     }

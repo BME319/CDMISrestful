@@ -63,41 +63,6 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        /// <summary>
-        /// 时间格式转换 GL 2015-10-10
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public string TransTime(string time)
-        {
-            int length = time.Length;
-            string result = "";
-            try
-            {
-                switch (length)
-                {
-                    case 1:
-                        result = "00：0" + time;
-                        break;
-                    case 2:
-                        result = "00：" + time;
-                        break;
-                    case 3:
-                        result = "0" + time.Substring(0, 1) + "：" + time.Substring(1, 2);
-                        break;
-                    case 4:
-                        result = time.Substring(0, 2) + "：" + time.Substring(2, 2);  //Substring(起始, 截取长度)
-                        break;
-                    default: break;
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CommonMethod.TransTime", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
-                return null;
-            }
-        }
+      
     }
 }
