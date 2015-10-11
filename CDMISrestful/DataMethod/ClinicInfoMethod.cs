@@ -7,7 +7,7 @@ using InterSystems.Data.CacheClient;
 using CDMISrestful.DataModels;
 
 
-namespace CDMISrestful.DataBaseMethod
+namespace CDMISrestful.DataMethod
 {
 
     public class ClinicInfoMethod

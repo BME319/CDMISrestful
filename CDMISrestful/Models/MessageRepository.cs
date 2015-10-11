@@ -1,5 +1,5 @@
 ﻿using CDMISrestful.CommonLibrary;
-using CDMISrestful.DataBaseMethod;
+using CDMISrestful.DataMethod;
 using CDMISrestful.DataModels;
 using InterSystems.Data.CacheClient;
 using System;
