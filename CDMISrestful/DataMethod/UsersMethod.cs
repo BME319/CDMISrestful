@@ -6,12 +6,12 @@ using CDMISrestful.CommonLibrary;
 using InterSystems.Data.CacheClient;
 using CDMISrestful.DataModels;
 
-namespace CDMISrestful.DataBaseMethod
+namespace CDMISrestful.DataMethod
 {
     public class UsersMethod
     {
 
-        public int GetCheckPasswordByInput(DataConnection pclsCache, string Type, string Name, string Password)
+        public int CheckPasswordByInput(DataConnection pclsCache, string Type, string Name, string Password)
         {
             int ret = 0;
             try
@@ -85,32 +85,6 @@ namespace CDMISrestful.DataBaseMethod
                 pclsCache.DisConnect();
             }
         }
-
-        //CheckPassworkByInput LS 2015-03-26  TDY 20150507修改 //WF 20151010
-        public int CheckPasswordByInput(DataConnection pclsCache, string Type, string Name, string Password)
-        {
-            int ret = 0;
-            try
-            {
-                if (!pclsCache.Connect())
-                {
-                    return ret;
-                }
-
-                ret = (int)Cm.MstUserDetail.CheckPasswordByInput(pclsCache.CacheConnectionObject, Type, Name, Password);
-                return ret;
-            }
-            catch (Exception ex)
-            {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Cm.MstUserDetail.CheckPasswordByInput", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
-                return ret;
-            }
-            finally
-            {
-                pclsCache.DisConnect();
-            }
-        }
-
 
         #endregion
 

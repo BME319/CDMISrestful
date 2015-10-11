@@ -6,7 +6,7 @@ using CDMISrestful.CommonLibrary;
 using CDMISrestful.DataModels;
 using InterSystems.Data.CacheClient;
 
-namespace CDMISrestful.DataBaseMethod
+namespace CDMISrestful.DataMethod
 {
     public class DictMethod
     {

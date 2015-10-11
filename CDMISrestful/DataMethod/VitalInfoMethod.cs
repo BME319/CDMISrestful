@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using CDMISrestful.DataMethod;
 
-namespace CDMISrestful.DataBaseMethod
+namespace CDMISrestful.DataMethod
 {
     public class VitalInfoMethod
     {

@@ -5,26 +5,26 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using CDMISrestful.CommonLibrary;
-using CDMISrestful.DataBaseMethod;
+using CDMISrestful.DataMethod;
 using InterSystems.Data.CacheClient;
 
 namespace CDMISrestful.Models
 {
     public class UsersRepository : IUsersRepository
     {
-         //DataConnection
+        //DataConnection
         DataConnection pclsCache = new DataConnection();
         UsersMethod usersMethod = new UsersMethod();
-        public int LogOn(string PwType, string userId, string password,string role)
+        public int LogOn(string PwType, string userId, string password, string role)
         {
-            int result = usersMethod.GetCheckPasswordByInput(pclsCache, PwType, userId, password);
+            int result = usersMethod.CheckPasswordByInput(pclsCache, PwType, userId, password);
             if (result == 1)
             {
                 //密码验证成功
                 string UId = usersMethod.GetIDByInput(pclsCache, PwType, userId); //输入手机号获取用户ID
                 if (UId != "")
                 {
-                    string Class = usersMethod.GetActivatedState(pclsCache, UId, role); 
+                    string Class = usersMethod.GetActivatedState(pclsCache, UId, role);
                     if (Class == "0")
                     {
                         int flag = 0;
@@ -49,7 +49,7 @@ namespace CDMISrestful.Models
                     else      //Class == "1" or Class == ""
                     {
                         return 3;            //您的账号对应的角色未激活，需要先激活；界面跳转到游客页面（已注册但未激活）
-                    }                 
+                    }
                 }
                 else
                 {
@@ -64,7 +64,9 @@ namespace CDMISrestful.Models
             {
                 return 4;   //"用户不存在"
             }
-        }     
-    }
+        }      
     
+
+
+    }
 }
