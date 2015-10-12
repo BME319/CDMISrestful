@@ -16,7 +16,6 @@ namespace CDMISrestful.Controllers
 
         [Route("Api/v1/Users/LogOn")]
         [ModelValidationFilter]
-        [HttpGet]
         public HttpResponseMessage LogOn(LogOn logOn)
         {
             int ret = repository.LogOn(logOn.PwType, logOn.username, logOn.password, logOn.role);
