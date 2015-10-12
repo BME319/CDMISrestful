@@ -9,7 +9,13 @@ namespace CDMISrestful.DataMethod
     public class CommonMethod
     {
         #region CmMstNumbering
-        //GetNo 自动编号 CSQ 20151010
+        /// <summary>
+        /// GetNo 自动编号 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="NumberingType"></param>
+        /// <param name="TargetDate"></param>
+        /// <returns></returns>
         public string GetNo(DataConnection pclsCache, int NumberingType, string TargetDate)
         {
             string number = "";
@@ -27,7 +33,7 @@ namespace CDMISrestful.DataMethod
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.ToString(), "获取编号失败！");
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstNumbering.GetNo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CommonMethod.GetNo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return number;
             }
             finally
@@ -37,7 +43,11 @@ namespace CDMISrestful.DataMethod
         }
         #endregion
 
-        //GetServerTime 获取服务器时间 CSQ 20151010
+        /// <summary>
+        /// GetServerTime 获取服务器时间 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public string GetServerTime(DataConnection pclsCache)
         {
             string serverTime = string.Empty;
@@ -53,7 +63,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "GetServerTime", "WebService调用异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CommonMethod.GetServerTime", "WebService调用异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return serverTime;
                 throw (ex);
             }

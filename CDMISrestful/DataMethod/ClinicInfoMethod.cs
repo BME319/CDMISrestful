@@ -5,6 +5,7 @@ using System.Web;
 using CDMISrestful.CommonLibrary;
 using InterSystems.Data.CacheClient;
 using CDMISrestful.DataModels;
+using CDMISrestful.DataViewModels;
 
 
 namespace CDMISrestful.DataMethod
@@ -13,7 +14,13 @@ namespace CDMISrestful.DataMethod
     public class ClinicInfoMethod
     {
         #region <PsClinicalInfo>
-        //住院-转科处理 LY 2015-10-10  
+        /// <summary>
+        /// 住院-转科处理 LY 2015-10-10  
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="VisitId"></param>
+        /// <returns></returns>
         public List<ClinicalTrans> PsClinicalInfoGetTransClinicalInfo(DataConnection pclsCache, string UserId, string VisitId)
         {
             //最终输出
@@ -64,7 +71,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsClinicalInfo.GetClinicalInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetClinicalInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -85,7 +92,13 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //检查化验等信息 LY 2015-10-10
+        /// <summary>
+        /// 检查化验等信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="VisitId"></param>
+        /// <returns></returns>
         public List<ClinicalTrans> PsClinicalInfoGetOtherTable(DataConnection pclsCache, string UserId, string VisitId)
         {
             //输出表
@@ -131,24 +144,24 @@ namespace CDMISrestful.DataMethod
                     NewLine.关键属性 = "LabTestInfo" + "|" + VisitId + "|" + Convert.ToDateTime(List_LabTest[i].LabTestDate).ToString("yyyy-MM-ddHH:mm:ss");
                     List_Trans.Add(NewLine);
                 }
-                //用药    这部分要等syf写完GetDrugRecord才行
-                //List<DrugRecordList> List_DrugRecord = new List<DrugRecordList>();
-                //List_DrugRecord = GetDrugRecordList(pclsCache, UserId, VisitId);
-                //for (int i = 0; i < List_DrugRecord.Count; i++)
-                //{
-                //    ClinicalTrans NewLine = new ClinicalTrans();
-                //    NewLine.精确时间 = Convert.ToDateTime(List_DrugRecord[i].StartDateTime);
-                //    NewLine.类型 = "用药";
-                //    NewLine.VisitId = VisitId;
-                //    NewLine.事件 = "用药：" + List_DrugRecord[i].HistoryContent;
-                //    NewLine.关键属性 = "DrugRecord" + "|" + VisitId + "|" + Convert.ToDateTime(List_DrugRecord[i].StartDateTime).ToString("yyyy-MM-ddHH:mm:ss");
-                //    List_Trans.Add(NewLine);
-                //}
+                //用药    
+                List<DrugRecord> List_DrugRecord = new List<DrugRecord>();
+                List_DrugRecord = GetDrugRecord(pclsCache, UserId, VisitId);
+                for (int i = 0; i < List_DrugRecord.Count; i++)
+                {
+                    ClinicalTrans NewLine = new ClinicalTrans();
+                    NewLine.精确时间 = Convert.ToDateTime(List_DrugRecord[i].StartDateTime);
+                    NewLine.类型 = "用药";
+                    NewLine.VisitId = VisitId;
+                    NewLine.事件 = "用药：" + List_DrugRecord[i].HistoryContent;
+                    NewLine.关键属性 = "DrugRecord" + "|" + VisitId + "|" + Convert.ToDateTime(List_DrugRecord[i].StartDateTime).ToString("yyyy-MM-ddHH:mm:ss");
+                    List_Trans.Add(NewLine);
+                }
                 return List_Trans;
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsClinicalInfo.GetClinicalInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetClinicalInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -156,7 +169,13 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //获取门诊的下一日期 LY 2015-10-10
+        /// <summary>
+        /// 获取门诊的下一日期 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="ClinicDate"></param>
+        /// <returns></returns>
         public string PsClinicalInfoGetNextOutDate(DataConnection pclsCache, string UserId, string ClinicDate)
         {
             string ret = "";
@@ -180,7 +199,13 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //获取住院的下一日期 LY 2015-10-10
+        /// <summary>
+        /// 获取住院的下一日期 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="AdmissionDate"></param>
+        /// <returns></returns>
         public string PsClinicalInfoGetNextInDate(DataConnection pclsCache, string UserId, string AdmissionDate)
         {
             string ret = "";
@@ -195,7 +220,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.InPatientInfo.GetNextDatebyDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetNextDatebyDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -204,7 +229,11 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //颜色分配：根据首标签决定 LY 2015-10-10
+        /// <summary>
+        /// 颜色分配：根据首标签决定 LY 2015-10-10
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public string PsClinicalInfoGetColor(string type)
         {
             string colorShow = "clolor_default";
@@ -232,13 +261,95 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsClinicalInfo.GetColor", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetColor", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
         }
+
+        //检查化验详细信息查看
+        public VClinicInfo GetClinicInfoDetail(DataConnection pclsCache, string UserId, string Type, string VisitId, string Date)
+        {
+            VClinicInfo list = new VClinicInfo();
+            List<DiagnosisInfo> DiagnosisInfo_DataViewModel = null;
+            List<ExamInfo> ExamInfo_DataViewModel = null;
+            List<LabTestList> LabTestList_DataViewModel = null;
+            List<DrugRecordList> DrugRecordList_DataViewModel = null;
+            string condition = "";
+            try
+            {
+                switch (Type)
+                {
+                    case "DiagnosisInfo": DiagnosisInfo_DataViewModel = new ClinicInfoMethod().PsDiagnosisGetDiagnosisInfo(pclsCache, UserId, VisitId);//诊断表
+                                          List<DiagnosisInfo> DiagnosisInfo_DataViewModel_copy = null;
+                                          foreach(DiagnosisInfo item in DiagnosisInfo_DataViewModel)
+                                          {
+                                               if(item.RecordDateCom == Date)
+                                               {
+                                                    DiagnosisInfo_DataViewModel_copy.Add(item);
+                                               }
+                                           }
+                                           list.DiagnosisInfo_DataViewModel = DiagnosisInfo_DataViewModel_copy;
+                        break;
+
+                    case "ExaminationInfo": ExamInfo_DataViewModel = new ClinicInfoMethod().PsExaminationGetExaminationList(pclsCache, UserId, VisitId); //检查表（有子表）
+                                            List<ExamInfo> ExamInfo_DataViewModel_copy = null;
+                                            foreach (ExamInfo item in ExamInfo_DataViewModel)
+                                            {
+                                              if (item.ExamDateCom == Date)
+                                               {
+                                                   ExamInfo_DataViewModel_copy.Add(item);
+                                               }
+                                            }
+                                            list.ExamInfo_DataViewModel = ExamInfo_DataViewModel_copy;
+                        break;
+
+                    case "LabTestInfo": LabTestList_DataViewModel = new ClinicInfoMethod().GetLabTestList(pclsCache, UserId, VisitId); //化验表（有子表）
+                                        List<LabTestList> LabTestList_DataViewModel_copy = null;
+                                        foreach (LabTestList item in LabTestList_DataViewModel)
+                                        {
+                                              if (item.LabTestDateCom == Date)
+                                              {
+                                                   LabTestList_DataViewModel_copy.Add(item);
+                                              }
+                                         }
+                                        list.LabTestList_DataViewModel = LabTestList_DataViewModel_copy;
+                        break;
+                    case "DrugRecord": DrugRecordList_DataViewModel = new ClinicInfoMethod().GetDrugRecordList(pclsCache, UserId, VisitId); //用药
+                                       condition = "StartDateTimeCom = '" + Date + "'";
+                                       list.DrugRecordList_DataViewModel = DrugRecordList_DataViewModel;
+                        break;
+                    default: break;
+                }
+                
+                //list肯定不为空
+
+
+
+                
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetClinicInfoDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+        
+        finally
+            {
+                pclsCache.DisConnect();
+            }
+    }
         #endregion
+
+
         #region <PsDiagnosis>
-        //得到诊断信息 LY 2015-10-10
+        /// <summary>
+        /// 得到诊断信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="VisitId"></param>
+        /// <returns></returns>
         public List<DiagnosisInfo> PsDiagnosisGetDiagnosisInfo(DataConnection pclsCache, string UserId, string VisitId)
         {
             List<DiagnosisInfo> list = new List<DiagnosisInfo>();
@@ -283,7 +394,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Diagnosis.GetDiagnosisInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetDiagnosisInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -304,8 +415,15 @@ namespace CDMISrestful.DataMethod
             }
         }
         #endregion
+
         #region <PsExamination>
-        //得到检查信息 LY 2015-10-10
+        /// <summary>
+        /// 得到检查信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="piVisitId"></param>
+        /// <returns></returns>
         public List<ExamInfo> PsExaminationGetExaminationList(DataConnection pclsCache, string piUserId, string piVisitId)
         {
             List<ExamInfo> list = new List<ExamInfo>();
@@ -361,7 +479,64 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Examination.GetExaminationList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetExaminationList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                if ((cdr != null))
+                {
+                    cdr.Close();
+                    cdr.Dispose(true);
+                    cdr = null;
+                }
+                if ((cmd != null))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Dispose();
+                    cmd = null;
+                }
+                pclsCache.DisConnect();
+            }
+        }
+
+        /// <summary>
+        /// CSQ 20150714 //20151012 SYF
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public List<NewExam> GetNewExam(DataConnection pclsCache, string UserId)
+        {
+            List<NewExam> list = new List<NewExam>();
+            CacheCommand cmd = null;
+            CacheDataReader cdr = null;
+            try
+            {
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
+                cmd = new CacheCommand();
+                cmd = Ps.Examination.GetNewExam(pclsCache.CacheConnectionObject);
+                cmd.Parameters.Add("UserId", CacheDbType.NVarChar).Value = UserId;
+
+                cdr = cmd.ExecuteReader();
+                while (cdr.Read())
+                {
+                    NewExam NewLine = new NewExam();
+                    NewLine.Name1 = cdr["Name1"].ToString();
+                    NewLine.Value1 = cdr["Value1"].ToString();
+                    NewLine.Name2 = cdr["Name2"].ToString();
+                    NewLine.Value2 = cdr["Value2"].ToString();
+                    NewLine.Name3 = cdr["Name3"].ToString();
+                    NewLine.Value3 = cdr["Value3"].ToString();
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetNewExam", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -461,9 +636,127 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
-        #endregion
 
-        
+        /// <summary>
+        /// GetNewLabTest CSQ 20150714 //20151012 SYF
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public List<NewLabTest> GetNewLabTest(DataConnection pclsCache, string UserId)
+        {
+            List<NewLabTest> list = new List<NewLabTest>();
+            CacheCommand cmd = null;
+            CacheDataReader cdr = null;
+
+            try
+            {
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
+                cmd = new CacheCommand();
+                cmd = Ps.LabTestDetails.GetNewLabTest(pclsCache.CacheConnectionObject);
+                cmd.Parameters.Add("UserId", CacheDbType.NVarChar).Value = UserId;
+                cdr = cmd.ExecuteReader();
+
+                while (cdr.Read())
+                {
+                    NewLabTest NewLine = new NewLabTest();
+                    NewLine.Code = cdr["Code"].ToString();
+                    NewLine.Name = cdr["Name"].ToString();
+                    NewLine.Value = cdr["Value"].ToString();
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetNewLabTest", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                if ((cdr != null))
+                {
+                    cdr.Close();
+                    cdr.Dispose(true);
+                    cdr = null;
+                }
+                if ((cmd != null))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Dispose();
+                    cmd = null;
+                }
+                pclsCache.DisConnect();
+            }
+        }
+
+        /// <summary>
+        /// GetLabTestDetails 获取患者某次化验的所有详细信息 ZC 2014-12-2 //CSQ 2015-06-25 //syf20151012
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="VisitId"></param>
+        /// <param name="SortNo"></param>
+        /// <returns></returns>
+        public List<LabTestDetails> GetLabTestDetails(DataConnection pclsCache, string UserId, string VisitId, string SortNo)
+        {
+            List<LabTestDetails> list = new List<LabTestDetails>();
+            CacheCommand cmd = null;
+            CacheDataReader cdr = null;
+
+            try
+            {
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
+                cmd = new CacheCommand();
+                cmd = Ps.LabTestDetails.GetLabTestDetails(pclsCache.CacheConnectionObject);
+                cmd.Parameters.Add("UserId", CacheDbType.NVarChar).Value = UserId;
+                cmd.Parameters.Add("VisitId", CacheDbType.NVarChar).Value = VisitId;
+                cmd.Parameters.Add("SortNo", CacheDbType.NVarChar).Value = SortNo;
+                cdr = cmd.ExecuteReader();
+
+                while (cdr.Read())
+                {
+                    LabTestDetails NewLine = new LabTestDetails();
+                    NewLine.Code = cdr["Code"].ToString();
+                    NewLine.Name = cdr["Name"].ToString();
+                    NewLine.Value = cdr["Value"].ToString();
+                    NewLine.IsAbnormalCode = cdr["IsAbnormalCode"].ToString();
+                    NewLine.IsAbnormal = cdr["IsAbnormal"].ToString();
+                    NewLine.UnitCode = cdr["UnitCode"].ToString();
+                    NewLine.Unit = cdr["Unit"].ToString();
+                    NewLine.Creator = cdr["Creator"].ToString(); 
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetLabTestDetails", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                if ((cdr != null))
+                {
+                    cdr.Close();
+                    cdr.Dispose(true);
+                    cdr = null;
+                }
+                if ((cmd != null))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Dispose();
+                    cmd = null;
+                }
+                pclsCache.DisConnect();
+            }
+        }        
+        #endregion
+     
         #region Ps.DrugRecord
         //syf 2015-10-10
         /// <summary>
@@ -553,6 +846,185 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
+
+        /// <summary>
+        /// SYF 20151012
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="piVisitId"></param>
+        /// <returns></returns>
+        public List<DrugRecord> GetDrugRecord(DataConnection pclsCache, string piUserId, string piVisitId)
+        {
+            List<DrugRecord> list = new List<DrugRecord>();
+            CacheCommand cmd = null;
+            CacheDataReader cdr = null;
+
+            try
+            {
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
+                cmd = new CacheCommand();
+                cmd = Ps.DrugRecord.GetDrugRecordList(pclsCache.CacheConnectionObject);
+                cmd.Parameters.Add("piUserId", CacheDbType.NVarChar).Value = piUserId;
+                cmd.Parameters.Add("piVisitId", CacheDbType.NVarChar).Value = piVisitId;
+                cdr = cmd.ExecuteReader();
+
+                while (cdr.Read())
+                {
+                    int OrderSubNo = 0;
+                    int FreqCounter = 0;
+                    int FreqInteval = 0;
+                    if (cdr["OrderSubNo"].ToString() != "")
+                    {
+                        OrderSubNo = Convert.ToInt32(cdr["OrderSubNo"].ToString());
+                    }
+
+                    if (OrderSubNo == 1)       //只拿出OrderSubNo为1的记录
+                    {
+                        if (cdr["FreqCounter"].ToString() != "")
+                        {
+                            FreqCounter = Convert.ToInt32(cdr["FreqCounter"].ToString());
+                        }
+                        if (cdr["FreqInteval"].ToString() != "")
+                        {
+                            FreqInteval = Convert.ToInt32(cdr["FreqInteval"].ToString());
+                        }
+
+                        //用药开始时间处理（时间轴标准）
+                        string StartDate = DateTime.Parse(cdr["StartDateTime"].ToString()).ToString("yyyyMMdd");
+
+                        //用药结束时间处理
+                        string EndDate = cdr["StopDateTime"].ToString();
+
+                        string Content = "";
+                        Content += cdr["OrderContent"].ToString();
+                        DrugRecord NewLine = new DrugRecord();
+                        NewLine.VisitId = cdr["VisitId"].ToString();
+                        NewLine.OrderNo = cdr["OrderNo"].ToString();
+                        NewLine.OrderSubNo = cdr["OrderSubNo"].ToString();
+                        NewLine.RepeatIndicatorCode = cdr["RepeatIndicatorCode"].ToString();
+                        NewLine.RepeatIndicator = cdr["RepeatIndicator"].ToString();
+                        NewLine.OrderClassCode = cdr["OrderClassCode"].ToString();
+                        NewLine.OrderClass = cdr["OrderClass"].ToString();
+                        NewLine.OrderCode = cdr["OrderCode"].ToString();
+                        NewLine.OrderContent = cdr["OrderContent"].ToString();
+                        NewLine.Dosage = cdr["Dosage"].ToString();
+                        NewLine.DosageUnitsCode = cdr["DosageUnitsCode"].ToString();
+                        NewLine.DosageUnits = cdr["DosageUnits"].ToString();
+                        NewLine.AdministrationCode = cdr["AdministrationCode"].ToString();
+                        NewLine.Administration = cdr["Administration"].ToString();
+                        NewLine.StartDateTime = cdr["StartDateTime"].ToString();
+                        NewLine.StopDateTime = cdr["StopDateTime"].ToString();
+                        NewLine.Frequency = cdr["Frequency"].ToString();
+                        NewLine.FreqCounter = cdr["FreqCounter"].ToString();
+                        NewLine.FreqInteval = cdr["FreqInteval"].ToString();
+                        NewLine.FreqIntevalUnitCode = cdr["FreqIntevalUnitCode"].ToString();
+                        NewLine.FreqIntevalUnit = cdr["FreqIntevalUnit"].ToString();
+                        NewLine.HistoryContent = cdr["HistoryContent"].ToString();
+                        NewLine.StartDate = cdr["StartDate"].ToString();
+                        NewLine.StopDate = cdr["StopDate"].ToString();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetDrugRecordList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                if ((cdr != null))
+                {
+                    cdr.Close();
+                    cdr.Dispose(true);
+                    cdr = null;
+                }
+                if ((cmd != null))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Dispose();
+                    cmd = null;
+                }
+                pclsCache.DisConnect();
+            }
+        }
+
+        /// <summary>
+        /// syf 2015-10-12 获取某病人所有药嘱
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="Module"></param>
+        /// <returns></returns>
+        public List<PsDrugRecord> GetPsDrugRecord(DataConnection pclsCache, string piUserId, string Module)
+        {
+            List<PsDrugRecord> list = new List<PsDrugRecord>();
+            CacheCommand cmd = null;
+            CacheDataReader cdr = null;
+            try
+            {
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
+                cmd = new CacheCommand();
+                cmd = Ps.DrugRecord.GetPsDrugRecord(pclsCache.CacheConnectionObject);
+                cmd.Parameters.Add("piUserId", CacheDbType.NVarChar).Value = piUserId;
+                cmd.Parameters.Add("Module", CacheDbType.NVarChar).Value = Module;
+
+                cdr = cmd.ExecuteReader();
+                while (cdr.Read())
+                {
+                    PsDrugRecord NewLine = new PsDrugRecord();
+                    NewLine.VisitId = cdr["VisitId"].ToString();
+                    NewLine.OrderNo = cdr["OrderNo"].ToString();
+                    NewLine.OrderSubNo = cdr["OrderSubNo"].ToString();
+                    NewLine.RepeatIndicator = cdr["RepeatIndicator"].ToString();
+                    NewLine.OrderClass = cdr["OrderClass"].ToString();
+                    NewLine.OrderCode = cdr["OrderCode"].ToString();
+                    NewLine.DrugName = cdr["DrugName"].ToString();
+                    NewLine.CurativeEffect = cdr["CurativeEffect"].ToString();
+                    NewLine.SideEffect = cdr["SideEffect"].ToString();
+                    NewLine.Instruction = cdr["Instruction"].ToString();
+                    NewLine.HealthEffect = cdr["HealthEffect"].ToString();
+                    NewLine.Unit = cdr["Unit"].ToString();
+                    NewLine.OrderContent = cdr["OrderContent"].ToString();
+                    NewLine.Dosage = cdr["Dosage"].ToString();
+                    NewLine.DosageUnits = cdr["DosageUnits"].ToString();
+                    NewLine.Administration = cdr["Administration"].ToString();
+                    NewLine.StartDateTime = cdr["StartDateTime"].ToString();
+                    NewLine.StopDateTime = cdr["StopDateTime"].ToString();
+                    NewLine.Frequency = cdr["Frequency"].ToString();
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetPsDrugRecord", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+            finally
+            {
+                if ((cdr != null))
+                {
+                    cdr.Close();
+                    cdr.Dispose(true);
+                    cdr = null;
+                }
+                if ((cmd != null))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Dispose();
+                    cmd = null;
+                }
+                pclsCache.DisConnect();
+            }
+        }
+
         #endregion
     }
 }
