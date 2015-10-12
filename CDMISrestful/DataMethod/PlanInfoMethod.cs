@@ -12,9 +12,25 @@ namespace CDMISrestful.DataMethod
     {
         public class PlanInfo
         {
-            //Ps.Plan
+            
             #region
             //SYF 20151010
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PlanNo"></param>
+            /// <param name="PatientId"></param>
+            /// <param name="StartDate"></param>
+            /// <param name="EndDate"></param>
+            /// <param name="Module"></param>
+            /// <param name="Status"></param>
+            /// <param name="DoctorId"></param>
+            /// <param name="piUserId"></param>
+            /// <param name="piTerminalName"></param>
+            /// <param name="piTerminalIP"></param>
+            /// <param name="piDeviceType"></param>
+            /// <returns></returns>
             public int PsPlanSetData(DataConnection pclsCache, string PlanNo, string PatientId, int StartDate, int EndDate, string Module, int Status, string DoctorId, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
             {
                 int ret = 0;
@@ -30,7 +46,7 @@ namespace CDMISrestful.DataMethod
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Plan.SetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.PsPlanSetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return ret;
                 }
                 finally
@@ -40,6 +56,17 @@ namespace CDMISrestful.DataMethod
             }
 
             //SYF 20151010
+            /// <summary>
+            /// 插入一条新纪录到Ps.Plan表
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PlanNo"></param>
+            /// <param name="Status"></param>
+            /// <param name="piUserId"></param>
+            /// <param name="piTerminalName"></param>
+            /// <param name="piTerminalIP"></param>
+            /// <param name="piDeviceType"></param>
+            /// <returns></returns>
             public int ChangePlanStatus(DataConnection pclsCache, string PlanNo, int Status, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
             {
                 int ret = 0;
@@ -56,7 +83,7 @@ namespace CDMISrestful.DataMethod
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Plan.PlanStart", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.ChangePlanStatus", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return ret;
                 }
                 finally
@@ -65,7 +92,13 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //GetWeekPeriod 获取某计划的相关信息 SYF 2015-10-10
+           
+            /// <summary>
+            /// 获取某计划的相关信息 SYF 2015-10-10
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PlanStartDate"></param>
+            /// <returns></returns>
             public Period GetWeekPeriod(DataConnection pclsCache, int PlanStartDate)
             {
                 try
@@ -75,14 +108,19 @@ namespace CDMISrestful.DataMethod
                     {
                         return null;
                     }
-                    ret.StartDate = Ps.Plan.GetWeekPeriod(pclsCache.CacheConnectionObject, PlanStartDate)[0];
-                    ret.EndDate = Ps.Plan.GetWeekPeriod(pclsCache.CacheConnectionObject, PlanStartDate)[1];
-                    ret.DayCount = Ps.Plan.GetWeekPeriod(pclsCache.CacheConnectionObject, PlanStartDate)[2];
+                    InterSystems.Data.CacheTypes.CacheSysList list = null;
+                    list = Ps.Plan.GetWeekPeriod(pclsCache.CacheConnectionObject, PlanStartDate);
+                    if(list != null)
+                    {
+                        ret.StartDate = list[0];
+                        ret.EndDate = list[1];
+                        ret.DayCount = list[2];
+                    }
                     return ret;
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsPlan.GetWeekPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetWeekPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -91,7 +129,13 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //GetProgressRate 获取某计划的进度和剩余天数 SYF 2015-10-10
+            
+            /// <summary>
+            /// 获取某计划的进度和剩余天数 SYF 2015-10-10
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PlanNo"></param>
+            /// <returns></returns>
             public Progressrate GetProgressRate(DataConnection pclsCache, string PlanNo)
             {
                 try
@@ -101,13 +145,18 @@ namespace CDMISrestful.DataMethod
                     {
                         return null;
                     }
-                    ret.RemainingDays = Ps.Plan.GetProgressRate(pclsCache.CacheConnectionObject, PlanNo)[0];
-                    ret.ProgressRate = Ps.Plan.GetProgressRate(pclsCache.CacheConnectionObject, PlanNo)[1];
+                    InterSystems.Data.CacheTypes.CacheSysList list = null;
+                    list = Ps.Plan.GetProgressRate(pclsCache.CacheConnectionObject, PlanNo);
+                    if (list != null)
+                    {
+                        ret.RemainingDays = list[0];
+                        ret.ProgressRate = list[1];
+                    }
                     return ret;
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsPlan.GetProgressRate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetProgressRate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -116,7 +165,13 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //GetPlanInfo 获取某计划的相关信息 SYF 2015-10-10
+           
+            /// <summary>
+            /// 获取某计划的相关信息 SYF 2015-10-10
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PlanNo"></param>
+            /// <returns></returns>
             public GPlanInfo GetPlanInfo(DataConnection pclsCache, string PlanNo)
             {
                 try
@@ -126,18 +181,23 @@ namespace CDMISrestful.DataMethod
                     {
                         return null;
                     }
-                    ret.PlanNo = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[0];
-                    ret.PatientId = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[1];
-                    ret.StartDate = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[2];
-                    ret.EndDate = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[3];
-                    ret.Module = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[4];
-                    ret.Status = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[5];
-                    ret.DoctorId = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo)[6];
+                    InterSystems.Data.CacheTypes.CacheSysList list = null;
+                    list = Ps.Plan.GetPlanInfo(pclsCache.CacheConnectionObject, PlanNo);
+                    if(list != null)
+                    {
+                        ret.PlanNo = list[0];
+                        ret.PatientId = list[1];
+                        ret.StartDate = list[2];
+                        ret.EndDate = list[3];
+                        ret.Module = list[4];
+                        ret.Status = list[5];
+                        ret.DoctorId = list[6];
+                    }
                     return ret;
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsPlan.GetPlanInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetPlanInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -146,7 +206,14 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //SYF 20151010 获取健康专员负责的所有患者列表
+           
+            /// <summary>
+            /// SYF 20151010 获取健康专员负责的所有患者列表
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="DoctorId"></param>
+            /// <param name="Module"></param>
+            /// <returns></returns>
             public List<PatientPlan> GetPatientsPlanByDoctorId(DataConnection pclsCache, string DoctorId, string Module)
             {
                 List<PatientPlan> list = new List<PatientPlan>();
@@ -166,7 +233,6 @@ namespace CDMISrestful.DataMethod
                     cdr = cmd.ExecuteReader();
                     while (cdr.Read())
                     {
-                        //DataCheck ZAM 2015-4-16
                         if (cdr["PatientId"].ToString() == string.Empty)
                         {
                             continue;
@@ -185,7 +251,7 @@ namespace CDMISrestful.DataMethod
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Plan.GetPatientsPlanByDoctorId", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetPatientsPlanByDoctorId", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -206,7 +272,14 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            // SYF 2015-10-10 获取健康专员负责的所有患者最新结束(status = 4)计划列表
+            
+            /// <summary>
+            /// SYF 2015-10-10 获取健康专员负责的所有患者最新结束(status = 4)计划列表
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="DoctorId"></param>
+            /// <param name="Module"></param>
+            /// <returns></returns>
             public List<PatientPlan> GetOverDuePlanByDoctorId(DataConnection pclsCache, string DoctorId, string Module)
             {
                 List<PatientPlan> list = new List<PatientPlan>();
@@ -239,7 +312,7 @@ namespace CDMISrestful.DataMethod
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Plan.GetOverDuePlanByDoctorId", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetOverDuePlanByDoctorId", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -260,7 +333,14 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //GetExecutingPlanByM  获取某模块正在执行的计划 Syf 2015-10-10
+           
+            /// <summary>
+            /// 获取某模块正在执行的计划 Syf 2015-10-10
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PatientId"></param>
+            /// <param name="Module"></param>
+            /// <returns></returns>
             public GPlanInfo GetExecutingPlanByM(DataConnection pclsCache, string PatientId, string Module)
             {
                 try
@@ -270,18 +350,23 @@ namespace CDMISrestful.DataMethod
                     {
                         return null;
                     }
-                    ret.PlanNo = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[0];
-                    ret.PatientId = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[1];
-                    ret.StartDate = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[2];
-                    ret.EndDate = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[3];
-                    ret.Module = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[4];
-                    ret.Status = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[5];
-                    ret.DoctorId = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[6];
+                    InterSystems.Data.CacheTypes.CacheSysList list = null;
+                    list = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId);
+                    if (list != null)
+                    {
+                        ret.PlanNo = list[0];
+                        ret.PatientId = list[1];
+                        ret.StartDate = list[2];
+                        ret.EndDate = list[3];
+                        ret.Module = list[4];
+                        ret.Status = list[5];
+                        ret.DoctorId = list[6];
+                    }
                     return ret;
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsPlan.GetExecutingPlanByM", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetExecutingPlanByM", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -290,7 +375,13 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-            //GetExecutingPlan 获取正在执行的计划 SYF 2015-10-10
+          
+            /// <summary>
+            /// 获取正在执行的计划 SYF 2015-10-10
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PatientId"></param>
+            /// <returns></returns>
             public GPlanInfo GetExecutingPlan(DataConnection pclsCache, string PatientId)
             {
                 try
@@ -300,18 +391,23 @@ namespace CDMISrestful.DataMethod
                     {
                         return null;
                     }
-                    ret.PlanNo = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[0];
-                    ret.PatientId = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[1];
-                    ret.StartDate = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[2];
-                    ret.EndDate = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[3];
-                    ret.Module = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[4];
-                    ret.Status = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[5];
-                    ret.DoctorId = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId)[6];
+                    InterSystems.Data.CacheTypes.CacheSysList list = null;
+                    list = Ps.Plan.GetExecutingPlan(pclsCache.CacheConnectionObject, PatientId);
+                    if (list != null)
+                    {
+                        ret.PlanNo = list[0];
+                        ret.PatientId = list[1];
+                        ret.StartDate = list[2];
+                        ret.EndDate = list[3];
+                        ret.Module = list[4];
+                        ret.Status = list[5];
+                        ret.DoctorId = list[6];
+                    }
                     return ret;
                 }
                 catch (Exception ex)
                 {
-                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsPlan.GetExecutingPlan", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetExecutingPlan", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                     return null;
                 }
                 finally
@@ -323,7 +419,19 @@ namespace CDMISrestful.DataMethod
 
             //Ps.Compliance
             #region
-           // 施宇帆 2015-10-10 插入子表PsComplianceDetail某条数据
+          
+            /// <summary>
+            /// 施宇帆 2015-10-10 插入子表PsComplianceDetail某条数据
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="Parent"></param>
+            /// <param name="Id"></param>
+            /// <param name="Status"></param>
+            /// <param name="CoUserId"></param>
+            /// <param name="CoTerminalName"></param>
+            /// <param name="CoTerminalIP"></param>
+            /// <param name="CoDeviceType"></param>
+            /// <returns></returns>
            public int PsComplianceDetailSetData(DataConnection pclsCache, string Parent, string Id, int Status, string CoUserId, string CoTerminalName, string CoTerminalIP, int CoDeviceType)
            {
                 int ret = 0;
@@ -339,7 +447,7 @@ namespace CDMISrestful.DataMethod
                 }
                 catch (Exception ex)
                 {
-                     HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.ComplianceDetail.SetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.PsComplianceDetailSetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                      return ret;
                 }
                 finally
@@ -348,7 +456,20 @@ namespace CDMISrestful.DataMethod
                 }
             }
 
-           // syf 2015-10-10 插入PsCompliance某条数据
+           
+            /// <summary>
+           ///  syf 2015-10-10 插入PsCompliance某条数据
+            /// </summary>
+            /// <param name="pclsCache"></param>
+            /// <param name="PatientId"></param>
+            /// <param name="Date"></param>
+            /// <param name="PlanNo"></param>
+            /// <param name="Compliance"></param>
+            /// <param name="revUserId"></param>
+            /// <param name="TerminalName"></param>
+            /// <param name="TerminalIP"></param>
+            /// <param name="DeviceType"></param>
+            /// <returns></returns>
            public int PsComplianceSetData(DataConnection pclsCache, string PatientId, int Date, string PlanNo, Double Compliance, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
            {
                int ret = 0;
@@ -364,7 +485,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.SetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.PsComplianceSetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return ret;
                }
                finally
@@ -373,7 +494,15 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           //GetTasksComByPeriod  某一天所有任务的依从情况 DataTable数据库形式   用于点击事件显示详细   SYF 20151010
+          
+           /// <summary>
+           /// 某一天所有任务的依从情况 DataTable数据库形式   用于点击事件显示详细   SYF 20151010
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="Date"></param>
+           /// <returns></returns>
            public List<TasksComList> GetTasksComListByDate(DataConnection pclsCache, string PatientId, string PlanNo, int Date)
            {
                List<TasksComList> list = new List<TasksComList>(); 
@@ -409,7 +538,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetTasksComListByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTasksComListByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -430,7 +559,16 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           //GetTasksComByPeriod  某段时间所有任务的依从情况  DataTable数据库形式  SYF 20151010
+           
+           /// <summary>
+           /// 某段时间所有任务的依从情况  DataTable数据库形式  SYF 20151010
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="StartDate"></param>
+           /// <param name="EndDate"></param>
+           /// <returns></returns>
            public List<TasksComByPeriodDT> GetTasksComByPeriodDT(DataConnection pclsCache, string PatientId, string PlanNo, int StartDate, int EndDate)
            {
 
@@ -467,7 +605,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetTasksComByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTasksComByPeriodDT", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -488,7 +626,14 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           // syf 2015-10-10根据计划编码和日期，获取依从率
+           /// <summary>
+           /// syf 2015-10-10根据计划编码和日期，获取依从率
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="Date"></param>
+           /// <param name="PlanNo"></param>
+           /// <returns></returns>
            public List<TasksByDate> GetTasksByDate(DataConnection pclsCache, string PatientId, int Date, string PlanNo)
            {
                List<TasksByDate> list = new List<TasksByDate>(); 
@@ -519,7 +664,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetTasksByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTasksByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -540,7 +685,14 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           // syf 2015-10-10 在当天根据任务状态的完成情况输出相应的任务
+           /// <summary>
+           /// syf 2015-10-10 在当天根据任务状态的完成情况输出相应的任务
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="PiStatus"></param>
+           /// <returns></returns>
            public List<TasksByStatus> GetTaskByStatus(DataConnection pclsCache, string PatientId, string PlanNo, int PiStatus)
            {
                List<TasksByStatus> list = new List<TasksByStatus>();
@@ -573,7 +725,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetTaskByStatus", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTaskByStatus", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -594,7 +746,17 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           //GetSignDetailByPeriod 通过Ps.Compliance中的date获取当天某项生理参数值，形成系列  DataTable 形式syf 2015-10-10
+           /// <summary>
+           /// 通过Ps.Compliance中的date获取当天某项生理参数值，形成系列  DataTable 形式syf 2015-10-10
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="ItemType"></param>
+           /// <param name="ItemCode"></param>
+           /// <param name="StartDate"></param>
+           /// <param name="EndDate"></param>
+           /// <returns></returns>
            public List<SignDetailByPeriod> GetSignDetailByPeriod(DataConnection pclsCache, string PatientId, string PlanNo, string ItemType, string ItemCode, int StartDate, int EndDate)
            {
                List<SignDetailByPeriod> list = new List<SignDetailByPeriod>();
@@ -633,7 +795,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsCompliacne.GetSignDetailByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetSignDetailByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -654,7 +816,15 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           // syf 2015-10-10 获取某计划的某段时间(包括端点)的依从率列表
+           /// <summary>
+           /// syf 2015-10-10 获取某计划的某段时间(包括端点)的依从率列表
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="StartDate"></param>
+           /// <param name="EndDate"></param>
+           /// <returns></returns>
            public List<ComplianceListByPeriod> GetComplianceListByPeriod(DataConnection pclsCache, string PatientId, string PlanNo, int StartDate, int EndDate)
            {
                List<ComplianceListByPeriod> list = new List<ComplianceListByPeriod>();
@@ -685,7 +855,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetComplianceListByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetComplianceListByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
@@ -706,7 +876,14 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           // syf 2015-10-10 获取患者某计划内某天的依从率
+           /// <summary>
+           /// syf 2015-10-10 获取患者某计划内某天的依从率
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="Date"></param>
+           /// <param name="PlanNo"></param>
+           /// <returns></returns>
            public double GetComplianceByDay(DataConnection pclsCache, string PatientId, int Date, string PlanNo)
            {
                double ret = 0.0;
@@ -722,7 +899,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.Compliance.GetComplianceByDay", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetComplianceByDay", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return ret;
                }
                finally
@@ -731,7 +908,15 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-           //GetCompliacneRate 计算某段时间的总依从率 syf 2015-10-10
+           /// <summary>
+           /// 计算某段时间的总依从率 syf 2015-10-10
+           /// </summary>
+           /// <param name="pclsCache"></param>
+           /// <param name="PatientId"></param>
+           /// <param name="PlanNo"></param>
+           /// <param name="StartDate"></param>
+           /// <param name="EndDate"></param>
+           /// <returns></returns>
            public string GetCompliacneRate(DataConnection pclsCache, string PatientId, string PlanNo, int StartDate, int EndDate)
            {
                string compliacneRate = "";
@@ -764,7 +949,6 @@ namespace CDMISrestful.DataMethod
 
                    if (count != 0)
                    {
-                       //compliacneRate = ((int)((sum / count) * 100)).ToString();
                        compliacneRate = (Math.Round(sum / count, 2, MidpointRounding.AwayFromZero) * 100).ToString(); //保留整数
 
                    }
@@ -773,7 +957,7 @@ namespace CDMISrestful.DataMethod
                }
                catch (Exception ex)
                {
-                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsCompliacne.GetCompliacneRate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetCompliacneRate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                    return null;
                }
                finally
