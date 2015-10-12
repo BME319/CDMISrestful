@@ -11,7 +11,12 @@ namespace CDMISrestful.DataMethod
     public class DictMethod
     {
         #region CmMstType
-        // GetTypeList 获取某个分类的类别 CSQ 20151010
+        /// <summary>
+        /// 获取某个分类的类别 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="Category"></param>
+        /// <returns></returns>
         public List<TypeAndName> CmMstTypeGetTypeList(DataConnection pclsCache, string Category)
         {
             List<TypeAndName> list = new List<TypeAndName>();
@@ -40,7 +45,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstType.GetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -65,6 +70,12 @@ namespace CDMISrestful.DataMethod
         #endregion 
        
         #region CmMstLifeStyleDetail
+        /// <summary>
+        /// 获取生活方式细节 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="Module"></param>
+        /// <returns></returns>
         public List<LifeStyleDetail> GetLifeStyleDetail(DataConnection pclsCache, string Module)
         {
             List<LifeStyleDetail> list = new List<LifeStyleDetail>();
@@ -101,7 +112,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Cm.MstLifeStyleDetail.GetLifeStyleDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetLifeStyleDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -124,7 +135,11 @@ namespace CDMISrestful.DataMethod
         #endregion
 
         #region Cm.MstInsurance
-        //GetInsurance CSQ 20151010
+        /// <summary>
+        /// GetInsurance CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<Insurance> GetInsurance(DataConnection pclsCache)
         {
             List<Insurance> list = new List<Insurance>();
@@ -156,7 +171,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstInsurance.GetInsurance", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetInsurance", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -180,6 +195,11 @@ namespace CDMISrestful.DataMethod
         #endregion
 
         #region Cm.MstInfoItem
+        /// <summary>
+        /// CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<CmMstInfoItem> GetCmMstInfoItem(DataConnection pclsCache)
         {
             List<CmMstInfoItem> CmMstInfoItemList = new List<CmMstInfoItem>();
@@ -193,7 +213,6 @@ namespace CDMISrestful.DataMethod
                 {
                     return null;
                 }
-                //cmd = new CacheCommand();
                 cmd = Cm.MstInfoItem.GetInfoItem(pclsCache.CacheConnectionObject);
                 cdr = cmd.ExecuteReader();
                 while (cdr.Read())
@@ -220,7 +239,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstInfoItem.GetInfoItem", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetInfoItem", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -242,7 +261,12 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //GetMstInfoItemByCategoryCode CSQ 2014-12-04 
+        /// <summary>
+        /// GetMstInfoItemByCategoryCode CSQ 2015-10-10 
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="CategoryCode"></param>
+        /// <returns></returns>
         public List<MstInfoItemByCategoryCode> GetMstInfoItemByCategoryCode(DataConnection pclsCache, string CategoryCode)
         {
             List<MstInfoItemByCategoryCode> list = new List<MstInfoItemByCategoryCode>();          
@@ -265,7 +289,6 @@ namespace CDMISrestful.DataMethod
                 cdr = cmd.ExecuteReader();
                 int SortNo;
                 int GroupHeaderFlag;
-                //int ControlType;
                 while (cdr.Read())
                 {
                     if (cdr["SortNo"].ToString() == "")
@@ -300,7 +323,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstInfoItem.GetMstInfoItemByCategoryCode", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetMstInfoItemByCategoryCode", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -324,7 +347,11 @@ namespace CDMISrestful.DataMethod
         #endregion
 
         #region Cm.MstHypertensionDrug
-        // GetTypeList 返回所有类型代码及名称 CSQ 20151010
+        /// <summary>
+        /// GetTypeList 返回所有类型代码及名称 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<TypeAndName> CmMstHypertensionDrugGetTypeList(DataConnection pclsCache)
         {
             List<TypeAndName> list = new List<TypeAndName>();
@@ -354,7 +381,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstHypertensionDrug.GetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -376,7 +403,11 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        // GetHypertensionDrug 返回所有数据信息 CSQ 20151010
+        /// <summary>
+        /// GetHypertensionDrug 返回所有数据信息 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<CmAbsType> GetHypertensionDrug(DataConnection pclsCache)
         {
             List<CmAbsType> list = new List<CmAbsType>();
@@ -424,7 +455,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstHypertensionDrug.GetHypertensionDrug", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetHypertensionDrug", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -449,7 +480,11 @@ namespace CDMISrestful.DataMethod
         #endregion
 
         #region CmMstDiabetesDrug GetTypeList
-        // CmMstDiabetesDrugGetTypeList 返回所有类型代码及名称 CSQ 20151010
+        /// <summary>
+        ///  CmMstDiabetesDrugGetTypeList 返回所有类型代码及名称 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<TypeAndName> CmMstDiabetesDrugGetTypeList(DataConnection pclsCache)
         {
             List<TypeAndName> list = new List<TypeAndName>();          
@@ -476,7 +511,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstDiabetesDrug.CmMstDiabetesDrugGetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.CmMstDiabetesDrugGetTypeList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -498,7 +533,11 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        // GetDiabetesDrug 返回所有数据信息 CSQ 20151010
+        /// <summary>
+        ///  GetDiabetesDrug 返回所有数据信息 CSQ 20151010
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <returns></returns>
         public List<CmAbsType> GetDiabetesDrug(DataConnection pclsCache)
         {
             List<CmAbsType> list = new List<CmAbsType>();
@@ -546,7 +585,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "CmMstHypertensionDrug.GetDiabetesDrug", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "DictMethod.GetDiabetesDrug", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally

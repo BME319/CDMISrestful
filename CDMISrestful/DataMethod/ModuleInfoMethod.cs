@@ -11,7 +11,22 @@ namespace CDMISrestful.DataMethod
     public class ModuleInfoMethod
     {
         #region <Ps.BasicInfoDetail>
-        //SetData LY 2015-10-10 
+        /// <summary>
+        /// SetData LY 2015-10-10 
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="Patient"></param>
+        /// <param name="CategoryCode"></param>
+        /// <param name="ItemCode"></param>
+        /// <param name="ItemSeq"></param>
+        /// <param name="Value"></param>
+        /// <param name="Description"></param>
+        /// <param name="SortNo"></param>
+        /// <param name="revUserId"></param>
+        /// <param name="TerminalName"></param>
+        /// <param name="TerminalIP"></param>
+        /// <param name="DeviceType"></param>
+        /// <returns></returns>
         public int PsBasicInfoDetailSetData(DataConnection pclsCache, string Patient, string CategoryCode, string ItemCode, int ItemSeq, string Value, string Description, int SortNo, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
         {
             int ret = 2;
@@ -26,7 +41,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.SetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailSetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -35,7 +50,15 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        // 获取需要知道的项目的值 LY 2015-10-10
+        /// <summary>
+        ///  获取需要知道的项目的值 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="CategoryCode"></param>
+        /// <param name="ItemCode"></param>
+        /// <param name="ItemSeq"></param>
+        /// <returns></returns>
         public string PsBasicInfoDetailGetValue(DataConnection pclsCache, string UserId, string CategoryCode, string ItemCode, int ItemSeq)
         {
             string ret = "";
@@ -50,7 +73,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.GetValue", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailGetValue", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -59,7 +82,12 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //得到专员信息 LY 2015-10-10
+        /// <summary>
+        /// 得到专员信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="PatientId"></param>
+        /// <returns></returns>
         public TypeAndName PsBasicInfoDetailGetSDoctor(DataConnection pclsCache, string PatientId)
         {
             TypeAndName ret = new TypeAndName();
@@ -69,13 +97,18 @@ namespace CDMISrestful.DataMethod
                 {
                     return ret;
                 }
-                ret.Type = Ps.BasicInfoDetail.GetSDoctor(pclsCache.CacheConnectionObject, PatientId)[0].ToString();
-                ret.Name = Ps.BasicInfoDetail.GetSDoctor(pclsCache.CacheConnectionObject, PatientId)[1].ToString();
+                InterSystems.Data.CacheTypes.CacheSysList list = null;
+                list = Ps.BasicInfoDetail.GetSDoctor(pclsCache.CacheConnectionObject, PatientId);
+                if (list != null)
+                {
+                    ret.Type = list[0];
+                    ret.Name = list[1];
+                }
                 return ret;
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.GetSDoctor", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailGetSDoctor", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -84,7 +117,12 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //得到病人详细信息 LY 2015-10-10
+        /// <summary>
+        /// 得到病人详细信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public PatDetailInfo PsBasicInfoDetailGetPatientDetailInfo(DataConnection pclsCache, string UserId)
         {
             PatDetailInfo ret = new PatDetailInfo();
@@ -94,21 +132,26 @@ namespace CDMISrestful.DataMethod
                 {
                     return ret;
                 }
-                ret.PhoneNumber = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[0].ToString();
-                ret.HomeAddress = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[1].ToString();
-                ret.Occupation = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[2].ToString();
-                ret.Nationality = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[3].ToString();
-                ret.EmergencyContact = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[4].ToString();
-                ret.EmergencyContactPhoneNumber = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[5].ToString();
-                ret.PhotoAddress = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[6].ToString();
-                ret.IDNo = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[7].ToString();
-                ret.Height = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[8].ToString();
-                ret.Weight = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId)[9].ToString();
+                InterSystems.Data.CacheTypes.CacheSysList list = null;
+                list = Ps.BasicInfoDetail.GetPatientDetailInfo(pclsCache.CacheConnectionObject, UserId);
+                if (list != null)
+                {
+                    ret.PhoneNumber = list[0];
+                    ret.HomeAddress = list[1];
+                    ret.Occupation = list[2];
+                    ret.Nationality = list[3];
+                    ret.EmergencyContact = list[4];
+                    ret.EmergencyContactPhoneNumber = list[5];
+                    ret.PhotoAddress = list[6];
+                    ret.IDNo = list[7];
+                    ret.Height = list[8];
+                    ret.Weight = list[9];
+                }
                 return ret;
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.GetPatientDetailInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailGetPatientDetailInfo", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -117,7 +160,14 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //获取用户全部详细信息 LY 2015-10-10 
+        /// <summary>
+        /// 获取用户全部详细信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <param name="CategoryCode"></param>
+        /// <returns></returns>
+ 
         public List<PatBasicInfoDetail> PsBasicInfoDetailGetPatientBasicInfoDetail(DataConnection pclsCache, string UserId, string CategoryCode)
         {
             List<PatBasicInfoDetail> list = new List<PatBasicInfoDetail>();
@@ -183,7 +233,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.GetPatientBasicInfoDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailGetPatientBasicInfoDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -232,7 +282,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsBasicInfoDetail.GetModulesByPID", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsBasicInfoDetailGetModulesByPID", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -255,7 +305,22 @@ namespace CDMISrestful.DataMethod
         }
         #endregion
         #region <Ps.DoctorInfoDetail>
-        //SetData  LY 2015-10-10
+        /// <summary>
+        /// SetData  LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="Doctor"></param>
+        /// <param name="CategoryCode"></param>
+        /// <param name="ItemCode"></param>
+        /// <param name="ItemSeq"></param>
+        /// <param name="Value"></param>
+        /// <param name="Description"></param>
+        /// <param name="SortNo"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="piTerminalName"></param>
+        /// <param name="piTerminalIP"></param>
+        /// <param name="piDeviceType"></param>
+        /// <returns></returns>
         public int PsDoctorInfoDetailSetData(DataConnection pclsCache, string Doctor, string CategoryCode, string ItemCode, int ItemSeq, string Value, string Description, int SortNo, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
         {
             int ret = 2;
@@ -270,7 +335,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsDoctorInfoDetail.SetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsDoctorInfoDetailSetData", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -279,7 +344,14 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //得到最大的ItemSeq LY 2015-10-10
+        /// <summary>
+        /// 得到最大的ItemSeq LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="DoctorId"></param>
+        /// <param name="CategoryCode"></param>
+        /// <param name="ItemCode"></param>
+        /// <returns></returns>
         public int PsDoctorInfoDetailGetMaxItemSeq(DataConnection pclsCache, string DoctorId, string CategoryCode, string ItemCode)
         {
             int ret = 0;
@@ -294,7 +366,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsDoctorInfoDetail.GetMaxItemSeq", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsDoctorInfoDetailGetMaxItemSeq", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return ret;
             }
             finally
@@ -303,7 +375,12 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        //得到医生详细信息 LY 2015-10-10
+        /// <summary>
+        /// 得到医生详细信息 LY 2015-10-10
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public DocInfoDetail PsDoctorInfoDetailGetDoctorInfoDetail(DataConnection pclsCache, string UserId)
         {
             try
@@ -313,17 +390,22 @@ namespace CDMISrestful.DataMethod
                 {
                     return null;
                 }
-                ret.IDNo = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[0].ToString();
-                ret.PhotoAddress = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[1].ToString();
-                ret.UnitName = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[2].ToString();
-                ret.JobTitle = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[3].ToString();
-                ret.Level = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[4].ToString();
-                ret.Dept = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId)[5].ToString();
+                InterSystems.Data.CacheTypes.CacheSysList list = null;
+                list = Ps.DoctorInfoDetail.GetDoctorInfoDetail(pclsCache.CacheConnectionObject, UserId);
+                if (list != null)
+                {
+                    ret.IDNo = list[0];
+                    ret.PhotoAddress = list[1];
+                    ret.UnitName = list[2];
+                    ret.JobTitle = list[3];
+                    ret.Level = list[4];
+                    ret.Dept = list[5];
+                }
                 return ret;
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsDoctorInfoDetail.GetDoctorInfoDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ModuleInfoMethod.PsDoctorInfoDetailGetDoctorInfoDetail", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally

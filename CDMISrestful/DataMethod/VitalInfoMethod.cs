@@ -75,7 +75,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetLatestSMS", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetVitalSignDates", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -191,7 +191,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetLatestSMS", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetSignByDay", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -226,7 +226,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetLatestSMS", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "VitalInfoMethod.GetLatestVitalSignsByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
