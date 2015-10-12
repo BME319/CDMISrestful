@@ -15,6 +15,13 @@ namespace CDMISrestful.DataMethod
         //Ps.LabTest
         #region
         //SYF 2015-10-10
+        /// <summary>
+        /// 根据piUserId和piVisitId获取化验结果
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="piVisitId"></param>
+        /// <returns></returns>
         public List<LabTestList> GetLabTestList(DataConnection pclsCache, string piUserId, string piVisitId)
         {
 
@@ -35,17 +42,6 @@ namespace CDMISrestful.DataMethod
                 cdr = cmd.ExecuteReader();
                 while (cdr.Read())
                 {
-                    //string LabTestDateShow = "", ReportDateShow = "";
-                    //string str = cdr["LabTestDate"].ToString();
-                    //if (str != "0")
-                    //{
-                    //    LabTestDateShow = str.Substring(0, 4) + "-" + str.Substring(4, 2) + "-" + str.Substring(6, 2);
-                    //}
-                    //string str1 = cdr["ReportDate"].ToString();
-                    //if (str1 != "0")
-                    //{
-                    //    ReportDateShow = str1.Substring(0, 4) + "-" + str1.Substring(4, 2) + "-" + str1.Substring(6, 2);
-                    //}
                     string ReportDateShow = "";
                     if (cdr["ReportDate"].ToString() == "9999/1/1 0:00:00")
                     {
@@ -75,7 +71,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.LabTest.GetLabTestList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetLabTestList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
@@ -100,6 +96,13 @@ namespace CDMISrestful.DataMethod
         //Ps.DrugRecord
         #region
         //syf 2015-10-10
+        /// <summary>
+        /// 根据piUserId和piVisitId获取用药结果
+        /// </summary>
+        /// <param name="pclsCache"></param>
+        /// <param name="piUserId"></param>
+        /// <param name="piVisitId"></param>
+        /// <returns></returns>
         public List<DrugRecordList> GetDrugRecordList(DataConnection pclsCache, string piUserId, string piVisitId)
         {
             List<DrugRecordList> list = new List<DrugRecordList>();
@@ -160,7 +163,7 @@ namespace CDMISrestful.DataMethod
             }
             catch (Exception ex)
             {
-                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "Ps.DrugRecord.GetDrugRecordList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "ClinicInfoMethod.GetDrugRecordList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
             finally
