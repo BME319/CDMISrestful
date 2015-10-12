@@ -8,8 +8,8 @@ namespace CDMISrestful.Models
     public interface IUsersRepository
     {
         int LogOn(string PwType, string userId, string password, string role);
-
-        //PatientListInfo GetPatientList(string DoctorId, string ModuleType, int Plan, int Compliance, int Goal);
-
+        int Register(string PwType, string userId, string UserName, string Password, string role, string revUserId, string TerminalName, string TerminalIP, int DeviceType);
+        int Activition(string UserId, string InviteCode);
+        int ChangePassword(string OldPassword, string NewPassword, string ConfirmPassword, string UserId, string Device, string revUserId, string TerminalName, string TerminalIP, int DeviceType);
     }
 }
