@@ -70,5 +70,12 @@ namespace CDMISrestful.DataModels
         /// 未读消息数
         /// </summary>
         public string Count { get; set; }
+        /// <summary>
+        /// 以下4个字段为更新信息输入
+        /// </summary>
+        public string piUserId{ get; set; }
+        public string piTerminalName{ get; set; }
+        public string piTerminalIP{ get; set; }
+        public int piDeviceType{ get; set; }        
     }
 }

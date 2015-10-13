@@ -5,15 +5,15 @@ using System.Web;
 using CDMISrestful.CommonLibrary;
 using InterSystems.Data.CacheClient;
 using CDMISrestful.DataModels;
+using System.Data;
 
 namespace CDMISrestful.DataMethod
 {
     public class PlanInfoMethod
     {
-        public class PlanInfo
-        {
+        
             //Ps.Plan
-            #region
+            #region Ps.Plan
             //SYF 20151010
             public int PsPlanSetData(DataConnection pclsCache, string PlanNo, string PatientId, int StartDate, int EndDate, string Module, int Status, string DoctorId, string piUserId, string piTerminalName, string piTerminalIP, int piDeviceType)
             {
@@ -319,11 +319,116 @@ namespace CDMISrestful.DataMethod
                     pclsCache.DisConnect();
                 }
             }
+
+            //GetPlanList34ByM 获取某模块患者的正在执行的和结束的计划列表 GL 2015-10-12
+            public List<PlanDeatil> GetPlanList34ByM(DataConnection pclsCache, string PatientId, string Module)
+            {
+                List<PlanDeatil> result = new List<PlanDeatil>();
+                try
+                {
+                    GPlanInfo list = GetExecutingPlanByM(pclsCache, PatientId, Module);
+                    if (list != null)
+                    {
+                        PlanDeatil PlanDeatil = new PlanDeatil();
+                        PlanDeatil.PlanNo = list.PlanNo;
+                        PlanDeatil.StartDate = Convert.ToInt32(list.StartDate);
+                        PlanDeatil.EndDate = Convert.ToInt32(list.EndDate);
+                        string temp = PlanDeatil.StartDate.ToString().Substring(0, 4) + "/" + PlanDeatil.StartDate.ToString().Substring(4, 2) + "/" + PlanDeatil.StartDate.ToString().Substring(6, 2);
+                        string temp1 = PlanDeatil.EndDate.ToString().Substring(0, 4) + "/" + PlanDeatil.EndDate.ToString().Substring(4, 2) + "/" + PlanDeatil.EndDate.ToString().Substring(6, 2);
+                        PlanDeatil.PlanName = "当前计划：" + temp + "-" + temp1;
+                        result.Add(PlanDeatil);
+                    }
+                    else
+                    {
+                        PlanDeatil PlanDeatil = new PlanDeatil();
+                        PlanDeatil.PlanNo = "";
+                        PlanDeatil.PlanName = "当前计划";
+                        result.Add(PlanDeatil);
+                    }
+
+
+                    List<PlanDeatil> endingPlanList = new List<PlanDeatil>();
+                    endingPlanList = GetEndingPlan(pclsCache, PatientId, Module);
+                    foreach (PlanDeatil item in endingPlanList)
+                    {
+                        PlanDeatil PlanDeatil = new PlanDeatil();
+                        PlanDeatil.PlanNo = item.PlanNo;
+                        PlanDeatil.StartDate = item.StartDate;
+                        PlanDeatil.EndDate = item.EndDate;
+                        string temp = PlanDeatil.StartDate.ToString().Substring(0, 4) + "/" + PlanDeatil.StartDate.ToString().Substring(4, 2) + "/" + PlanDeatil.StartDate.ToString().Substring(6, 2);
+                        string temp1 = PlanDeatil.EndDate.ToString().Substring(0, 4) + "/" + PlanDeatil.EndDate.ToString().Substring(4, 2) + "/" + PlanDeatil.EndDate.ToString().Substring(6, 2);
+                        PlanDeatil.PlanName = "往期：" + temp + "-" + temp1;
+                        result.Add(PlanDeatil);
+                    }
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetPlanList34ByM", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    return null;
+                }
+                finally
+                {
+                    pclsCache.DisConnect();
+                }
+            }
+            //GetEndingPlan 获取某模块已经结束的计划 GL 2015-10-12
+            public List<PlanDeatil> GetEndingPlan(DataConnection pclsCache, string PatientId, string Module)
+            {
+                List<PlanDeatil> items = new List<PlanDeatil>();
+                CacheCommand cmd = null;
+                CacheDataReader cdr = null;
+                try
+                {
+                    if (!pclsCache.Connect())
+                    {
+                        return null;
+                    }
+                    cmd = new CacheCommand();
+                    cmd = Ps.Plan.GetPlanList4ByM(pclsCache.CacheConnectionObject);
+                    cmd.Parameters.Add("PatientId", CacheDbType.NVarChar).Value = PatientId;
+                    cmd.Parameters.Add("Module", CacheDbType.NVarChar).Value = Module;
+
+                    cdr = cmd.ExecuteReader();
+                    while (cdr.Read())
+                    {
+                        PlanDeatil item = new PlanDeatil();
+                        item.PlanNo = cdr["PlanNo"].ToString();
+                        item.StartDate = Convert.ToInt32(cdr["StartDate"]);
+                        item.EndDate = Convert.ToInt32(cdr["EndDate"]);
+                        items.Add(item);
+                    }
+                    return items;
+                }
+                catch (Exception ex)
+                {
+                    HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetEndingPlan", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    return null;
+                }
+                finally
+                {
+                    if ((cdr != null))
+                    {
+                        cdr.Close();
+                        cdr.Dispose(true);
+                        cdr = null;
+                    }
+                    if ((cmd != null))
+                    {
+                        cmd.Parameters.Clear();
+                        cmd.Dispose();
+                        cmd = null;
+                    }
+                    pclsCache.DisConnect();
+                }
+            }
+                      
             #endregion
 
             //Ps.Compliance
-            #region
-           // 施宇帆 2015-10-10 插入子表PsComplianceDetail某条数据
+            #region Ps.Compliance
+            // 施宇帆 2015-10-10 插入子表PsComplianceDetail某条数据
            public int PsComplianceDetailSetData(DataConnection pclsCache, string Parent, string Id, int Status, string CoUserId, string CoTerminalName, string CoTerminalIP, int CoDeviceType)
            {
                 int ret = 0;
@@ -403,7 +508,8 @@ namespace CDMISrestful.DataMethod
                        NewLine.TaskName = cdr["TaskName"].ToString();
                        NewLine.Status = cdr["Status"].ToString();
                        NewLine.TaskCode = cdr["TaskCode"].ToString();
-                       NewLine.Type = cdr["Type"].ToString(); 
+                       NewLine.Type = cdr["Type"].ToString();
+                       list.Add(NewLine);
                    }
                    return list;
                }
@@ -794,8 +900,563 @@ namespace CDMISrestful.DataMethod
                }
            }
 
-   
+           //所有任务的依从情况简化版 不再全部显示，只对完成数量就行统计  pad、phone使用中 GL 2015-10-12
+           public List<CompliacneDetailByD> GetTasksComCountByPeriod(DataConnection pclsCache, string PatientId, string PlanNo, int StartDate, int EndDate)
+           {
+
+               List<CompliacneDetailByD> resultList = new List<CompliacneDetailByD>();
+
+               CacheCommand cmd = null;
+               CacheDataReader cdr = null;
+               try
+               {
+                   //DataTable list = new DataTable();
+                   //list = PsCompliance.GetTasksComByPeriodDT(pclsCache, PatientId, PlanNo, StartDate, EndDate);
+                   List<TasksComByPeriodDT> list0 = GetTasksComByPeriodDT(pclsCache, PatientId, PlanNo, StartDate, EndDate);
+
+                   DataTable list = new DataTable();
+                   list.Columns.Add(new DataColumn("Date", typeof(string)));
+                   list.Columns.Add(new DataColumn("ComplianceValue", typeof(double)));
+                   list.Columns.Add(new DataColumn("TaskType", typeof(string))); //中文
+                   list.Columns.Add(new DataColumn("TaskId", typeof(string)));
+                   list.Columns.Add(new DataColumn("TaskName", typeof(string)));
+                   list.Columns.Add(new DataColumn("Status", typeof(int)));
+                   list.Columns.Add(new DataColumn("Type", typeof(string))); //英文
+
+                   foreach(TasksComByPeriodDT item in list0)
+                   {
+                       list.Rows.Add(item.Date, item.ComplianceValue, item.TaskType, item.TaskId, item.TaskName, item.Status, item.Type);
+                   }
+
+                   //确保排序
+                   DataView dv = list.DefaultView;
+                   dv.Sort = "Date Asc, Type desc, Status Asc"; //体征s 生活l 用药d   前提：某计划内任务维持不变  即计划内每天的任务是一样的
+                   DataTable list_sort = dv.ToTable();
+                   list_sort.Rows.Add("end", 0, "", "", "", 0);  //用于最后一天输出
+
+                   if (list_sort.Rows.Count > 1)
+                   {
+                       string temp_date = list_sort.Rows[0]["Date"].ToString();
+                       string temp_type = list_sort.Rows[0]["TaskType"].ToString();  //中文
+                       int complete = 0; int count = 0;  //完成数量统计
+
+
+                       string temp_str = "";
+                       temp_str += "该天依从率：" + list_sort.Rows[0]["ComplianceValue"].ToString() + "<br>";
+                       temp_str += "<b><span style='font-size:14px;'>" + list_sort.Rows[0]["TaskType"].ToString() + "：</span></b>";
+
+                       CompliacneDetailByD CompliacneDetailByD = new CompliacneDetailByD();
+                       CompliacneDetailByD.Date = list_sort.Rows[0]["Date"].ToString();
+                       //CompliacneDetailByD.ComplianceValue = list_sort.Rows[0]["ComplianceValue"].ToString();
+
+                       if (Convert.ToDouble(list_sort.Rows[0]["ComplianceValue"]) == 0)  //点的颜色由该天依从率决定
+                       {
+                           CompliacneDetailByD.drugBullet = "";
+                           CompliacneDetailByD.drugColor = "#DADADA";
+                       }
+                       else if (Convert.ToDouble(list_sort.Rows[0]["ComplianceValue"]) == 1)
+                       {
+                           CompliacneDetailByD.drugBullet = "";
+                           CompliacneDetailByD.drugColor = "#777777";
+                       }
+                       else
+                       {
+                           CompliacneDetailByD.drugBullet = "amcharts-images/drug.png";
+                           CompliacneDetailByD.drugColor = "";
+                       }
+
+
+                       if (Convert.ToInt32(list_sort.Rows[0]["Status"]) == 1)  //某天某项任务的完成情况
+                       {
+                           complete++;
+                           count++;
+                       }
+                       else
+                       {
+                           count++;
+                       }
+
+
+                       //只有一条数据
+                       if (list_sort.Rows.Count == 2)
+                       {
+                           temp_str += complete + "/" + count;
+                           CompliacneDetailByD.Events = temp_str;
+                           resultList.Add(CompliacneDetailByD);
+                       }
+
+                       //＞一条数据
+                       if (list_sort.Rows.Count > 2)
+                       {
+                           for (int i = 1; i <= list_sort.Rows.Count - 1; i++)
+                           {
+                               if (temp_date == list_sort.Rows[i]["Date"].ToString())  //同一天
+                               {
+                                   if (temp_type == list_sort.Rows[i]["TaskType"].ToString())     //同天同任务类型
+                                   {
+                                       if (Convert.ToInt32(list_sort.Rows[i]["Status"]) == 1)  //某天某项任务的完成情况
+                                       {
+                                           complete++;
+                                           count++;
+                                       }
+                                       else
+                                       {
+                                           count++;
+                                       }
+                                   }
+                                   else   //同天不同任务类型
+                                   {
+                                       temp_str += complete + "/" + count;
+                                       complete = 0; count = 0;  //清空统计量
+                                       temp_str += "<br><b><span style='font-size:14px;'>" + list_sort.Rows[i]["TaskType"].ToString() + "：</span></b>";
+
+                                       if (Convert.ToInt32(list_sort.Rows[i]["Status"]) == 1)  //某天某项任务的完成情况
+                                       {
+                                           complete++;
+                                           count++;
+                                       }
+                                       else
+                                       {
+                                           count++;
+                                       }
+
+                                       temp_type = list_sort.Rows[i]["TaskType"].ToString();
+                                   }
+
+                               }
+                               else   //不同天
+                               {
+                                   //上一天输出
+
+                                   temp_str += complete + "/" + count;
+                                   complete = 0; count = 0;  //清空统计量
+                                   CompliacneDetailByD.Events = temp_str;
+                                   resultList.Add(CompliacneDetailByD);
+
+                                   if (list_sort.Rows[i]["Date"].ToString() != "end")
+                                   {
+                                       //获取新一天
+                                       CompliacneDetailByD = new CompliacneDetailByD();
+                                       CompliacneDetailByD.Date = list_sort.Rows[i]["Date"].ToString();
+                                       //CompliacneDetailByD.ComplianceValue = list_sort.Rows[i]["ComplianceValue"].ToString();
+
+                                       if (Convert.ToDouble(list_sort.Rows[i]["ComplianceValue"]) == 0)  //某天依从率
+                                       {
+                                           CompliacneDetailByD.drugBullet = "";
+                                           CompliacneDetailByD.drugColor = "#DADADA";
+                                       }
+                                       else if (Convert.ToDouble(list_sort.Rows[i]["ComplianceValue"]) == 1)
+                                       {
+                                           CompliacneDetailByD.drugBullet = "";
+                                           CompliacneDetailByD.drugColor = "#777777";
+                                       }
+                                       else
+                                       {
+                                           CompliacneDetailByD.drugBullet = "amcharts-images/drug.png";
+                                           CompliacneDetailByD.drugColor = "";
+                                       }
+
+                                       temp_str = "";
+                                       temp_str += "该天依从率：" + list_sort.Rows[i]["ComplianceValue"].ToString() + "<br>";
+                                       temp_str += "<b><span style='font-size:14px;'>" + list_sort.Rows[i]["TaskType"].ToString() + "：</span></b>";
+
+                                       if (Convert.ToInt32(list_sort.Rows[i]["Status"]) == 1)  //某天某项任务的完成情况
+                                       {
+                                           complete++;
+                                           count++;
+                                       }
+                                       else
+                                       {
+                                           count++;
+                                       }
+
+                                       temp_date = list_sort.Rows[i]["Date"].ToString();
+                                       temp_type = list_sort.Rows[i]["TaskType"].ToString();
+                                   }
+                               }
+                           }
+
+                       }
+
+                   }
+
+                   return resultList;
+               }
+               catch (Exception ex)
+               {
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTasksComCountByPeriod", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   return null;
+               }
+               finally
+               {
+                   if ((cdr != null))
+                   {
+                       cdr.Close();
+                       cdr.Dispose(true);
+                       cdr = null;
+                   }
+                   if ((cmd != null))
+                   {
+                       cmd.Parameters.Clear();
+                       cmd.Dispose();
+                       cmd = null;
+                   }
+                   pclsCache.DisConnect();
+               }
+           }
+
+           //某天所有任务的依从情况 整理加工 GL 2015-10-12
+           public TaskComDetailByD GetImplementationByDate(DataConnection pclsCache, string PatientId, string PlanNo, int Date)
+           {
+               TaskComDetailByD TaskComDetailByD = new TaskComDetailByD();
+               try
+               {
+                   TaskComDetailByD.Date = Date.ToString().Substring(0, 4) + "-" + Date.ToString().Substring(4, 2) + "-" + Date.ToString().Substring(6, 2);
+                   TaskComDetailByD.WeekDay = new CommonFunction().CaculateWeekDay(TaskComDetailByD.Date);
+
+                   List<TasksComList> ComplianceList = new List<TasksComList>();
+                   ComplianceList = GetTasksComListByDate(pclsCache, PatientId, PlanNo, Date);
+
+                   #region 后期可能用于优化
+                   //先读任务表，读取体征，拿出新数据；再读药物表，超过三个则省略号
+                   //DataTable TaskList = new DataTable();
+                   //TaskList = PsTask.GetTaskList(pclsCache, PlanNo);
+
+                   ////读取体征，拿出当天最新数据
+                   //string condition = " Type = 'VitalSign'";
+                   //DataRow[] VitalSignRows = TaskList.Select(condition);
+
+                   //CacheSysList VitalSignList = new InterSystems.Data.CacheTypes.CacheSysList(System.Text.Encoding.Unicode, true, true);
+                   //for (int j=0; j < VitalSignRows.Length; j++)
+                   //{
+                   //    string code = VitalSignRows[j]["Type"].ToString();
+                   //    string[] sArray = code.Split(new char[] { '|' });;//拆分
+                   //    string type = sArray[0].ToString();
+                   //    VitalSignList = new InterSystems.Data.CacheTypes.CacheSysList(System.Text.Encoding.Unicode, true, true);
+                   //    VitalSignList = PsVitalSigns.GetSignByDay(pclsCache, PatientId, code, type, Date);
+                   //    if (VitalSignList != null)
+                   //    {
+
+                   //    }
+                   //}
+
+
+
+
+
+                   //体征
+                   /*
+                   string condition = " Type = 'VitalSign'";
+                   DataRow[] VitalSignRows = ComplianceList.Select(condition);
+
+                   List<TaskCom> TaskComList = new List<TaskCom>();
+                   TaskCom TaskCom = new TaskCom();
+                   for (int j = 0; j < VitalSignRows.Length; j++)
+                   {
+                       VitalTaskCom = new VitalTaskCom();
+                       VitalTaskCom.SignName = VitalSignRows[j]["TaskName"].ToString();
+                       VitalTaskCom.Status = VitalSignRows[j]["Status"].ToString();
+                       if (TaskCom.TaskStatus == "1")
+                       {
+                           string code = VitalSignRows[j]["TaskCode"].ToString();
+                           string[] sArray = code.Split(new char[] { '|' }); ;//拆分
+                           string type = sArray[0].ToString();
+                           //CacheSysList VitalSignList = new InterSystems.Data.CacheTypes.CacheSysList(System.Text.Encoding.Unicode, true, true);
+                           CacheSysList VitalSignList = new InterSystems.Data.CacheTypes.CacheSysList(System.Text.Encoding.Unicode, true, true);
+                           VitalSignList = PsVitalSigns.GetSignByDay(pclsCache, PatientId, code, type, Date);
+                           if (VitalSignList != null)
+                           {
+                            
+                               VitalTaskCom.Time = PulList[1].ToString();
+                               VitalTaskCom.Value = PulList[2].ToString();
+                               VitalTaskCom.Unit = PulList[3].ToString();
+                            
+                           } 
+                       }
+                       VitalTaskComList.Add(VitalTaskCom);
+                   }
+                   TaskComDetailByD.VitalTaskComList = VitalTaskComList;
+
+                
+                    string vitalCondition = " Type = 'VitalSign'";
+                       DataRow[] VitalSignRows = ComplianceList.Select(vitalCondition);
+
+                       if ((VitalSignRows != null) && (VitalSignRows.Length >= 2))
+                       {
+
+
+
+                           if (VitalSignRows.Length == 2)  //只有血压
+                           {
+
+                           }
+                           else //血压和脉率
+                           {
+
+                           }
+                       }
+                
+                   */
+                   #endregion
+
+                   //取出当天的体征测量 若有与测试任务拼接好了
+                   //先写死取的生理参数
+                   List<VitalTaskCom> VitalTaskComList = new List<VitalTaskCom>();
+                   VitalTaskCom VitalTaskCom = new VitalTaskCom();
+
+                   string Module = "";
+                   GPlanInfo planInfo = GetPlanInfo(pclsCache, PlanNo);
+                   if (planInfo != null)
+                   {
+                       Module = planInfo.Module;
+                   }
+
+                   if (Module == "M1")
+                   {
+                       #region  高血压模块  需要考虑没有脉率任务的情况
+
+                       //血压任务肯定有
+                       int BPTime = 0;
+                       int mark = 0;
+                       string SysValue = "";
+                       string DiaValue = "";
+                       string Unit = "";
+
+                       //string conditionBP1 = " TaskCode = 'Bloodpressure|Bloodpressure_1'";
+                       List<TasksComList> BP1Rows = new List<TasksComList>();
+                       foreach (TasksComList item in ComplianceList)
+                       {
+                           if (item.TaskCode == "Bloodpressure|Bloodpressure_1")
+                           {
+                               BP1Rows.Add(item);
+                           }
+                       }
+                       if ((BP1Rows != null) && (BP1Rows.Count == 1))
+                       {
+                           if (BP1Rows[0].Status == "1")
+                           {
+                               VitalInfo SysList = new VitalInfoMethod().GetSignByDay(pclsCache, PatientId, "Bloodpressure", "Bloodpressure_1", Date);
+                               if (SysList != null)
+                               {
+                                   mark = 1;
+                                   BPTime = Convert.ToInt32(SysList.RecordTime);  //时刻数据库是"1043"形式，需要转换  取两者最新的那个时间好了 即谁大取谁
+                                   SysValue = SysList.Value;
+                                   Unit = SysList.Unit;
+                               }
+                           }
+                       }
+
+                      // string conditionBP2 = " TaskCode = 'Bloodpressure|Bloodpressure_2'";
+                       List<TasksComList> BP2Rows = new List<TasksComList>();
+                       foreach (TasksComList item in ComplianceList)
+                       {
+                           if (item.TaskCode == "Bloodpressure|Bloodpressure_2")
+                           {
+                               BP2Rows.Add(item);
+                           }
+                       }
+                       if ((BP2Rows != null) && (BP2Rows.Count == 1))
+                       {
+                           if (BP2Rows[0].Status == "1")
+                           {
+                               VitalInfo DiaList = new VitalInfoMethod().GetSignByDay(pclsCache, PatientId, "Bloodpressure", "Bloodpressure_2", Date);
+                               if (DiaList != null)
+                               {
+                                   mark = 1;
+                                   int BPTime1 = Convert.ToInt32(DiaList.RecordTime);
+                                   if (BPTime <= BPTime1)
+                                   {
+                                       BPTime = BPTime1;
+                                   }
+                                   DiaValue = DiaList.Value;
+                               }
+                           }
+                       }
+
+                       VitalTaskCom = new VitalTaskCom();
+                       VitalTaskCom.SignName = "血压";
+                       if (mark == 1)
+                       {
+                           VitalTaskCom.Status = "1";
+                           VitalTaskCom.Time = new CommonFunction().TransTime(BPTime.ToString());
+                           VitalTaskCom.Value = SysValue + "/" + DiaValue;
+                           VitalTaskCom.Unit = Unit;
+                       }
+                       else
+                       {
+                           VitalTaskCom.Status = "0";
+                       }
+                       VitalTaskComList.Add(VitalTaskCom);
+
+
+
+                       //脉率任务可能没没有，需要确认
+                       //string conditionPR = " TaskCode = 'Pulserate|Pulserate_1'";
+                       List<TasksComList> PulserateRows = new List<TasksComList>();
+                       foreach (TasksComList item in ComplianceList)
+                       {
+                           if (item.TaskCode == "Pulserate|Pulserate_1")
+                           {
+                               BP2Rows.Add(item);
+                           }
+                       }
+                       if ((PulserateRows != null) && (PulserateRows.Count == 1))
+                       {
+                           VitalTaskCom = new VitalTaskCom();
+                           VitalTaskCom.SignName = "脉率";
+
+                           if (PulserateRows[0].Status == "1")
+                           {
+                               VitalInfo PulList = new VitalInfoMethod().GetSignByDay(pclsCache, PatientId, "Pulserate", "Pulserate_1", Date);
+                               if (PulList != null)
+                               {
+
+                                   VitalTaskCom.Status = "1";
+                                   VitalTaskCom.Time = new CommonFunction().TransTime(PulList.RecordTime);
+                                   VitalTaskCom.Value = PulList.Value;
+                                   VitalTaskCom.Unit = PulList.Unit;
+                               }
+                               else
+                               {
+                                   VitalTaskCom.Status = "0";
+
+                               }
+                           }
+                           else
+                           {
+                               VitalTaskCom.Status = "0";
+
+                           }
+                           VitalTaskComList.Add(VitalTaskCom);
+                       }
+                       #endregion
+                   }
+
+                   TaskComDetailByD.VitalTaskComList = VitalTaskComList;
+
+                   TaskComByType TaskComByType = new TaskComByType();
+                   List<TaskCom> TaskComList = new List<TaskCom>();
+                   TaskCom TaskCom = new TaskCom();
+
+                   //生活方式 
+                   //string condition = " Type = 'LifeStyle'";
+                   List<TasksComList> LifeStyleRows = new List<TasksComList>();
+                   foreach (TasksComList item in ComplianceList)
+                   {
+                       if (item.Type == "LifeStyle")
+                       {
+                           LifeStyleRows.Add(item);
+                       }
+                   }
+
+                   if ((LifeStyleRows != null) && (LifeStyleRows.Count > 0))
+                   {
+                       TaskComByType = new TaskComByType();
+                       TaskComByType.TaskType = "生活方式";
+                       TaskComList = new List<TaskCom>();
+                       TaskCom = new TaskCom();
+
+                       foreach (TasksComList item in LifeStyleRows)
+                       {
+                           TaskCom = new TaskCom();
+                           TaskCom.TaskName = item.TaskName;
+                           TaskCom.TaskStatus = item.Status;
+                           TaskComList.Add(TaskCom);
+                       }
+                       TaskComByType.TaskComList = TaskComList;
+                       TaskComDetailByD.TaskComByTypeList.Add(TaskComByType);
+                   }
+
+                   //用药情况
+                   //condition = " Type = 'Drug'";
+                   List<TasksComList> DrugRows = new List<TasksComList>();
+                   foreach (TasksComList item in ComplianceList)
+                   {
+                       if (item.Type == "Drug")
+                       {
+                           DrugRows.Add(item);
+                       }
+                   }
+                   if ((DrugRows != null) && (DrugRows.Count > 0))
+                   {
+                       TaskComByType = new TaskComByType();
+                       TaskComByType.TaskType = "用药情况";
+                       TaskComList = new List<TaskCom>();
+                       TaskCom = new TaskCom();
+                       foreach (TasksComList item in DrugRows)
+                       {
+                           TaskCom = new TaskCom();
+                           TaskCom.TaskName = item.TaskName;
+                           TaskCom.TaskStatus = item.Status;
+                           TaskComList.Add(TaskCom);
+                       }
+                       TaskComByType.TaskComList = TaskComList;
+                       TaskComDetailByD.TaskComByTypeList.Add(TaskComByType);
+                   }
+                   return TaskComDetailByD;
+               }
+               catch (Exception ex)
+               {
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PsCompliance.GetImplementationByDate", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   return null;
+               }
+           }
+        
             #endregion
-        }
+
+            //Ps.Task
+            #region Ps.Task
+           public List<PsTask> GetTaskList(DataConnection pclsCache, string PlanNo)
+           {
+               List<PsTask> items = new List<PsTask>();
+               CacheCommand cmd = null;
+               CacheDataReader cdr = null;
+               try
+               {
+                   if (!pclsCache.Connect())
+                   {
+                       return null;
+                   }
+
+                   cmd = new CacheCommand();
+                   cmd = Ps.Task.GetPsTask(pclsCache.CacheConnectionObject);
+                   cmd.Parameters.Add("piUserId", CacheDbType.NVarChar).Value = PlanNo;
+                   cdr = cmd.ExecuteReader();
+                   while (cdr.Read())
+                   {
+                       PsTask item = new PsTask();
+                       item.Id = cdr["Id"].ToString();
+                       item.Type = cdr["Type"].ToString();
+                       item.Code = cdr["Code"].ToString();
+                       item.CodeName = cdr["CodeName"].ToString();
+                       item.Instruction = cdr["Instruction"].ToString();
+                       items.Add(item);
+                   }
+                   return items;
+               }
+               catch (Exception ex)
+               {
+                   HygeiaComUtility.WriteClientLog(HygeiaEnum.LogType.ErrorLog, "PlanInfoMethod.GetTaskList", "数据库操作异常！ error information : " + ex.Message + Environment.NewLine + ex.StackTrace);
+                   return null;
+               }
+               finally
+               {
+                   if ((cdr != null))
+                   {
+                       cdr.Close();
+                       cdr.Dispose(true);
+                       cdr = null;
+                   }
+                   if ((cmd != null))
+                   {
+                       cmd.Parameters.Clear();
+                       cmd.Dispose();
+                       cmd = null;
+                   }
+                   pclsCache.DisConnect();
+               }
+           }
+            #endregion
+        
     }
 }

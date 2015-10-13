@@ -11,24 +11,9 @@ namespace CDMISrestful.DataMethod
 {
     public class VitalInfoMethod
     {
-        //DataConnection pclsCache = new DataConnection();
-    
         #region < "Ps.VitalSigns" >
-        /// <summary>
-        /// Ps.VitalSigns.SetData GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="RecordDate"></param>
-        /// <param name="RecordTime"></param>
-        /// <param name="ItemType"></param>
-        /// <param name="ItemCode"></param>
-        /// <param name="Value"></param>
-        /// <param name="Unit"></param>
-        /// <param name="revUserId"></param>
-        /// <param name="TerminalName"></param>
-        /// <param name="TerminalIP"></param>
-        /// <param name="DeviceType"></param>
-        /// <returns></returns>
+      
+        // Ps.VitalSigns.SetData GL 2015-10-10       
         public int SetData(DataConnection pclsCache,string UserId, int RecordDate, int RecordTime, string ItemType, string ItemCode, string Value, string Unit, string revUserId, string TerminalName, string TerminalIP, int DeviceType)
         {
             int ret = 2;
@@ -51,20 +36,18 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
-
-        /// <summary>
-        /// 获取某日期之后的有数据的起止时间 GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="date"></param>
-        /// <param name="Num"></param>
-        /// <returns></returns>
+       
+        // 获取某日期之后的有数据的起止时间 GL 2015-10-10      
         public VitalInfo GetVitalSignDates(DataConnection pclsCache,string UserId, int date, int Num)
         {
             try
             {
                 VitalInfo item = new VitalInfo();
                 InterSystems.Data.CacheTypes.CacheSysList list = null;
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
                 list = Ps.VitalSigns.GetVitalSignDates(pclsCache.CacheConnectionObject, UserId, date, Num);
                 if (list != null)
                 {
@@ -83,16 +66,8 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
-
-        /// <summary>
-        /// 从数据库拿出相关数据 并增加type字段 区别收缩压、舒张压、脉率  用于phone 体征详细时刻表 GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="ItemType"></param>
-        /// <param name="ItemCode"></param>
-        /// <param name="StartDate"></param>
-        /// <param name="EndDate"></param>
-        /// <returns></returns>
+     
+        //从数据库拿出相关数据 并增加type字段 区别收缩压、舒张压、脉率  用于phone 体征详细时刻表 GL 2015-10-10       
         public  List<VitalInfo> GetTypedSignDetailByPeriod(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int StartDate, int EndDate)
         {
             {
@@ -165,20 +140,17 @@ namespace CDMISrestful.DataMethod
             }
         }
 
-        /// <summary>
-        /// GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="ItemType"></param>
-        /// <param name="ItemCode"></param>
-        /// <param name="RecordDate"></param>
-        /// <returns></returns>
+        // GL 2015-10-10
         public VitalInfo GetSignByDay(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int RecordDate)
         {
             try
             {
                 VitalInfo item = new VitalInfo();
                 InterSystems.Data.CacheTypes.CacheSysList list = null;
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
                 list = Ps.VitalSigns.GetSignByDay(pclsCache.CacheConnectionObject, UserId, ItemType, ItemCode, RecordDate);
                 if (list != null)
                 {
@@ -199,21 +171,18 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
-
-        /// <summary>
-        /// 获取患者某项生理参数的RecordDate前的最近一条数据 GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="ItemType"></param>
-        /// <param name="ItemCode"></param>
-        /// <param name="RecordDate"></param>
-        /// <returns></returns>
+  
+        // 获取患者某项生理参数的RecordDate前的最近一条数据 GL 2015-10-10       
         public VitalInfo GetLatestVitalSignsByDate(DataConnection pclsCache,string UserId, string ItemType, string ItemCode, int RecordDate)
         {
             try
             {
                 VitalInfo item = new VitalInfo();
                 InterSystems.Data.CacheTypes.CacheSysList list = null;
+                if (!pclsCache.Connect())
+                {
+                    return null;
+                }
                 list = Ps.VitalSigns.GetLatestVitalSignsByDate(pclsCache.CacheConnectionObject, UserId, ItemType, ItemCode, RecordDate);
                 if (list != null)
                 {
@@ -234,14 +203,8 @@ namespace CDMISrestful.DataMethod
                 pclsCache.DisConnect();
             }
         }
-
-        /// <summary>
-        /// 获取病人最新体征情况 GL 2015-10-10
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <param name="ItemType"></param>
-        /// <param name="ItemCode"></param>
-        /// <returns></returns>
+       
+        // 获取病人最新体征情况 GL 2015-10-10     
         public string GetLatestPatientVitalSigns(DataConnection pclsCache,string UserId, string ItemType, string ItemCode)
         {
             string ret = "";
